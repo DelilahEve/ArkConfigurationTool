@@ -10,6 +10,196 @@
         Width="700" >
     
     <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TabControl
+            Grid.Row="0"
+            Margin="8px" >
+
+            <TabItem
+                Header="Basic" >
+
+                <Grid
+                    Margin="8px" >
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition Height="7*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    
+                    <CheckBox
+                        x:Name="joinNotify"
+                        Content="Always notify player joined"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="leaveNotify"
+                        Content="Always notify player left"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="thirdPerson"
+                        Content="Allow third person"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="globalChat"
+                        Content="Global voice chat"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="mapLocation"
+                        Content="Show player on map"
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="tributeDownloads"
+                        Content="Allow character downloads"
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="proximityChat"
+                        Content="Only local chatbox"
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="serverPve"
+                        Content="PvE (turns off PvP)"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="serverHardcore"
+                        Content="Hardcore mode"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="noHud"
+                        Content="Force no HUD"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="structureDecay"
+                        Content="Structure Decay (affects PvE only)"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="dinoDecay"
+                        Content="Disable dino ownership decay"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox
+                        x:Name="flyerCarry"
+                        Content="Flyer Carry in PvE"
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        VerticalAlignment="Center" />
+
+                </Grid>
+                
+            </TabItem>
+
+            <TabItem
+                Header="Advanced">
+                
+                <!-- Advanced Options -->
+
+            </TabItem>
+
+            <TabItem
+                Header="Level Cap">
+
+                <!-- Advanced Options -->
+
+            </TabItem>
+
+            <TabItem
+                Header="Dinosaurs">
+
+                <!-- Advanced Options -->
+
+            </TabItem>
+
+            <TabItem
+                Header="Crafting/Engrams">
+
+                <!-- Advanced Options -->
+
+            </TabItem>
+
+            <TabItem
+                Header="Feedback">
+
+                <!-- Advanced Options -->
+
+            </TabItem>
+
+        </TabControl>
+        
+        <Grid
+            Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <Button
+                Content="Reset Fields"
+                Grid.Column="2"
+                Height="35px"
+                Margin="12px" />
+
+            <Button
+                Content="Generate"
+                Grid.Column="3"
+                Height="35px"
+                Margin="12px" />
+
+        </Grid>
         
     </Grid>
     
