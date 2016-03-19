@@ -570,7 +570,58 @@
             <TabItem
                 Header="Level Cap">
 
-                <!-- Advanced Options -->
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="5*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0" >
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Content="Level Cap:"
+                            Grid.Column="0"
+                            Margin="12px"
+                            VerticalAlignment="Center" />
+
+                        <TextBox
+                            x:Name="levelCap"
+                            Grid.Column="1"
+                            Margin="8px"
+                            VerticalAlignment="Center" />
+                        
+                    </Grid>
+
+                    <Grid
+                        Grid.Row="1">
+
+                        <DataGrid
+                            AlternatingRowBackground="Gray"
+                            SelectionMode="Single" >
+                            
+                            <DataGrid.Columns>
+                                
+                                <DataGridTextColumn 
+                                    Header="Level"
+                                    CanUserReorder="False"
+                                    CanUserSort="False"
+                                    CanUserResize="False" />
+                                
+                            </DataGrid.Columns>
+                            
+                        </DataGrid>
+                        
+                    </Grid>
+                    
+                </Grid>
 
             </TabItem>
 

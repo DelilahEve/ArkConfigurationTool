@@ -15,11 +15,10 @@ using System.Windows.Shapes;
 
 namespace ArkConfigurationTool
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private List<String> levels;
+
         public MainWindow()
         {
             InitializeComponent();
