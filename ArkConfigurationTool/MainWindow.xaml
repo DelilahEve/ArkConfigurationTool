@@ -8,7 +8,7 @@
         Title="MainWindow" 
         Height="900" 
         Width="700" >
-    
+
     <Grid>
 
         <Grid.RowDefinitions>
@@ -16,9 +16,32 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <Menu IsMainMenu="True"
+              Height="20px"
+              VerticalAlignment="Top">
+
+            <MenuItem Header="_File">
+
+                <MenuItem Header="_Open Server..." />
+                <Separator />
+                <MenuItem Header="_Close" />
+
+            </MenuItem>
+
+            <MenuItem Header="_Profiles">
+
+                <MenuItem Header="_Load Profile..." />
+                <MenuItem Header="_Save Profile" />
+
+            </MenuItem>
+            
+            <MenuItem Header="_Help" />
+
+        </Menu>
+
         <TabControl
             Grid.Row="0"
-            Margin="8px" >
+            Margin="8px 30px 8px 0px" >
 
             <TabItem
                 Header="Basic" >
@@ -113,14 +136,14 @@
                         VerticalAlignment="Center" />
 
                     <CheckBox
-                        x:Name="noHud"
+                        x:Name="allowHud"
                         Content="Force no HUD"
                         Grid.Row="2"
                         Grid.Column="1"
                         VerticalAlignment="Center" />
 
                     <CheckBox
-                        x:Name="structureDecay"
+                        x:Name="structureDecayPve"
                         Content="Structure Decay (PvE)"
                         Grid.Row="3"
                         Grid.Column="1"
@@ -134,21 +157,21 @@
                         VerticalAlignment="Center" />
 
                     <CheckBox
-                        x:Name="dinoDecay"
-                        Content="Disable dino ownership decay"
+                        x:Name="dinosaurDecay"
+                        Content="Disable dino decay"
                         Grid.Row="5"
                         Grid.Column="1"
                         VerticalAlignment="Center" />
 
                     <CheckBox
-                        x:Name="flyerCarry"
+                        x:Name="flyerCarryPve"
                         Content="Flyer Carry in PvE"
                         Grid.Row="6"
                         Grid.Column="1"
                         VerticalAlignment="Center" />
                     
                     <CheckBox
-                        x:Name="caveBuild"
+                        x:Name="caveBuildPve"
                         Content="Allow Cave Building (PvE)"
                         Grid.Row="7"
                         Grid.Column="1"
@@ -597,24 +620,110 @@
                             Grid.Column="1"
                             Margin="8px"
                             VerticalAlignment="Center" />
-                        
+
+                        <Grid
+                            Grid.Column="2">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="5*" />
+                                <ColumnDefinition Width="3*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label
+                                Content="Engram Step:"
+                                Grid.Column="1"
+                                Grid.Row="0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Margin="12px 0px"/>
+                            
+                            <TextBox
+                                x:Name="engramStep"
+                                Grid.Column="2"
+                                Grid.Row="0"
+                                VerticalAlignment="Center"
+                                Margin="8px 0px" />
+
+                            <Label
+                                Content="Level Step:"
+                                Grid.Column="1"
+                                Grid.Row="1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Margin="12px 0px"/>
+
+                            <TextBox
+                                x:Name="lvlStep"
+                                Grid.Column="2"
+                                Grid.Row="1"
+                                VerticalAlignment="Center"
+                                Margin="8px 0px" />
+
+                            <CheckBox
+                                Grid.Column="0"
+                                Grid.Row="2"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center" />
+                            
+                            <Label
+                                Content="Override vanilla level cap settings"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                VerticalAlignment="Center"/>
+                            
+                        </Grid>
+
                     </Grid>
 
                     <Grid
-                        Grid.Row="1">
+                        Grid.Row="1" >
 
                         <DataGrid
+                            HorizontalAlignment="Stretch" 
+                            HorizontalContentAlignment="Stretch" 
+                            ColumnWidth="*"
                             AlternatingRowBackground="Gray"
                             SelectionMode="Single" >
-                            
-                            <DataGrid.Columns>
-                                
+
+                            <DataGrid.Columns >
+
                                 <DataGridTextColumn 
                                     Header="Level"
                                     CanUserReorder="False"
                                     CanUserSort="False"
                                     CanUserResize="False" />
-                                
+
+                                <DataGridTextColumn 
+                                    Header="Total XP for Level"
+                                    CanUserReorder="False"
+                                    CanUserSort="False"
+                                    CanUserResize="False" />
+
+                                <DataGridTextColumn 
+                                    Header="XP Difference"
+                                    CanUserReorder="False"
+                                    CanUserSort="False"
+                                    CanUserResize="False" />
+
+                                <DataGridTextColumn 
+                                    Header="EP for Level"
+                                    CanUserReorder="False"
+                                    CanUserSort="False"
+                                    CanUserResize="False" />
+
+                                <DataGridTextColumn 
+                                    Header="XP Difference"
+                                    CanUserReorder="False"
+                                    CanUserSort="False"
+                                    CanUserResize="False" />
+
                             </DataGrid.Columns>
                             
                         </DataGrid>
@@ -628,21 +737,145 @@
             <TabItem
                 Header="Dinosaurs">
 
-                <!-- Advanced Options -->
+                <DataGrid
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch" 
+                    ColumnWidth="*"
+                    AlternatingRowBackground="Gray"
+                    SelectionMode="Single"
+                    Margin="12px" >
+
+                    <DataGrid.Columns >
+
+                        <DataGridTextColumn 
+                            Header="Dino Tag"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                        <DataGridCheckBoxColumn 
+                            Header="Allow Spawn"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                        <DataGridTextColumn 
+                            Header="Spawn Rate Multiplier"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                        <DataGridTextColumn 
+                            Header="Spawn Limit Percent"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                        <DataGridComboBoxColumn
+                            Header="Override AI"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
 
             </TabItem>
 
             <TabItem
                 Header="Crafting/Engrams">
 
-                <!-- Advanced Options -->
+                <DataGrid
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Stretch" 
+                    ColumnWidth="*"
+                    AlternatingRowBackground="Gray"
+                    SelectionMode="Single"
+                    Margin="12px" >
+
+                    <DataGrid.Columns >
+
+                        <DataGridTextColumn 
+                            Header="Engram"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                        <DataGridTextColumn 
+                            Header="Hide Engram"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                        <DataGridTextColumn 
+                            Header="EP Cost"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                        <DataGridTextColumn 
+                            Header="Level Requirement"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
 
             </TabItem>
 
             <TabItem
                 Header="Feedback">
 
-                <!-- Advanced Options -->
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        TextAlignment="Center">
+                        
+                        For support or to provide feedback:
+                        <LineBreak />
+                        <LineBreak />
+                        
+                        <Hyperlink 
+                            RequestNavigate="Hyperlink_RequestNavigate" 
+                            NavigateUri="http://github.com/DelilahEve/" >
+                            
+                            http://github.com/DelilahEve/ArkConfigurationTool/
+                            
+                        </Hyperlink>
+                        
+                    </TextBlock>
+
+                    <TextBlock
+                        Grid.Row="3"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center" >
+                        
+                        Developed And Maintained By
+                        
+                        <Hyperlink 
+                            RequestNavigate="Hyperlink_RequestNavigate" 
+                            NavigateUri="http://github.com/DelilahEve/" >
+                            
+                            DelilahEve
+                            
+                        </Hyperlink>
+                        
+                    </TextBlock>
+                    
+                </Grid>
 
             </TabItem>
 
@@ -668,7 +901,8 @@
                 Content="Generate"
                 Grid.Column="3"
                 Height="35px"
-                Margin="12px" />
+                Margin="12px"
+                Click="generateClick" />
 
         </Grid>
         
