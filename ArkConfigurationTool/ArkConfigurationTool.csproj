@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dino.cs" />
     <Compile Include="GameIni.cs" />
     <Compile Include="GameUserIni.cs" />
     <Compile Include="Reference.cs" />
