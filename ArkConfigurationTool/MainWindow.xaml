@@ -1436,7 +1436,7 @@
 
                     <DataGrid.Columns >
 
-                        <DataGridTextColumn 
+                        <DataGridComboBoxColumn 
                             Header="Dino Tag"
                             CanUserReorder="False"
                             CanUserSort="False"

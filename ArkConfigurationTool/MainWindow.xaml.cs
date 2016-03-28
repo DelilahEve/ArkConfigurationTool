@@ -27,6 +27,9 @@ namespace ArkConfigurationTool
 
         private Process serverProcess;
 
+        /// <summary>
+        ///     Initializes the program
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -37,6 +40,9 @@ namespace ArkConfigurationTool
             load();
         }
 
+        /// <summary>
+        ///     Loads the current servers, profiles, etc...
+        /// </summary>
         public void load()
         {
             // Check Folder exists
@@ -64,27 +70,61 @@ namespace ArkConfigurationTool
             }
         }
 
+        /// <summary>
+        ///     Loads a server when selected from the "Open Server..." menu item
+        /// </summary>
+        /// 
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">Arguments for the event</param>
         private void loadServer(Object sender, RoutedEventArgs e)
         {
             // get server name
             // load settings etc...
         }
 
+
+        /// <summary>
+        ///     Loads a profile when selected from the "Open Profile..." menu item
+        /// </summary>
+        /// 
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">Arguments for the event</param>
         private void loadServerProfile(Object sender, RoutedEventArgs e)
         {
             // load settings from profile
         }
 
+
+        /// <summary>
+        ///     Navigates to a link when clicked
+        /// </summary>
+        /// 
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">Arguments for the event</param>
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             // open link here
         }
-            
+
+
+        /// <summary>
+        ///     Saves the server settings when clicked
+        /// </summary>
+        /// 
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">Arguments for the event</param>
         private void generateClick(object sender, RoutedEventArgs e)
         {
             // Output files here
         }
 
+        /// <summary>
+        ///     Executes a Command Prompt command and directs the output to the
+        ///     output TextBox
+        /// </summary>
+        /// 
+        /// <param name="command">The command to run</param>
+        /// <param name="isStartServer">Whether or not the process being started is the server process</param>
         private void executeCommand(string command, Boolean isStartServer)
         {
             // set up cmd for command
@@ -120,11 +160,22 @@ namespace ArkConfigurationTool
             process.Close();
         }
 
+        /// <summary>
+        ///     Outputs the given text to the output TextBox
+        /// </summary>
+        /// 
+        /// <param name="text">The text to output</param>
         private void handleOutput(String text)
         {
             consoleOutput.Text += text + "\n";
         }
 
+        /// <summary>
+        ///     Collects and condenses the list of server settings that belong
+        ///     in GameUserSettings.ini
+        /// </summary>
+        /// 
+        /// <returns>The finalized list of server settings ready for writing to file</returns>
         private List<String> generateGameUserIni()
         {
             List<String> settings = new List<string>();
@@ -209,6 +260,13 @@ namespace ArkConfigurationTool
             return settings;
         }
 
+
+        /// <summary>
+        ///     Collects and condenses the list of server settings that belong
+        ///     in Game.ini
+        /// </summary>
+        /// 
+        /// <returns>The finalized list of server settings ready for writing to file</returns>
         private List<String> generateGameIni()
         {
             List<String> settings = new List<string>();
@@ -249,44 +307,69 @@ namespace ArkConfigurationTool
                 ?
             */
 
-            float resourceNoRespawnPlayer = float.Parse(resourceReplenishPlayer.Text);
-            float resourceNoRespawnStructure = float.Parse(resourceReplenishStructure.Text);
-            float mating = float.Parse(matingInterval.Text);
-            float eggHatchSpeed = float.Parse(eggHatch.Text);
-            float babyMatureSpeed = float.Parse(babyMature.Text);
-            float babyFoodConsume = float.Parse(babyFood.Text);
-            float layEggInterval = float.Parse(eggInterval.Text);
-            float poopIntervalMultiplier = float.Parse(poopInterval.Text);
-            float cropDecaySpeed = float.Parse(cropDecay.Text);
-            float structureDamageCd = float.Parse(structureDamageCooldown.Text);
-            float dinoHarvestDamageMultiplier = float.Parse(dinoHarvestDamage.Text);
-            float playerHarvestDamageMultiplier = float.Parse(playerHarvestDamage.Text);
-            float dinoTurretDammageMultiplier = float.Parse(dinoTurretDamage.Text);
-            float pvpRespawnCheckPeriod = float.Parse(pvpRespawn.Text);
-            float pvpRespawnMulti = float.Parse(pvpRespawnMultiplier.Text);
-            float pvpRespawnBasePeriod = float.Parse(pvpRespawnBase.Text);
+            float[] floatValues =
+            {
+                float.Parse(resourceReplenishPlayer.Text),
+                float.Parse(resourceReplenishStructure.Text),
+                float.Parse(matingInterval.Text),
+                float.Parse(eggHatch.Text),
+                float.Parse(babyMature.Text),
+                float.Parse(babyFood.Text),
+                float.Parse(eggInterval.Text),
+                float.Parse(poopInterval.Text),
+                float.Parse(cropDecay.Text),
+                float.Parse(structureDamageCooldown.Text),
+                float.Parse(dinoHarvestDamage.Text),
+                float.Parse(playerHarvestDamage.Text),
+                float.Parse(dinoTurretDamage.Text),
+                float.Parse(pvpRespawn.Text),
+                float.Parse(pvpRespawnMultiplier.Text),
+                float.Parse(pvpRespawnBase.Text)
+        };
+            
 
-            Boolean passiveDefenseDamage = (Boolean)passiveDefenseDamageDinos.IsChecked;
-            Boolean increasePvPRespawn = (Boolean)pvpRespwanInterval.IsChecked;
-            Boolean autoPveTimer = (Boolean)autoPve.IsChecked;
-            Boolean autPveSystemTime = (Boolean)autoPveUsesSystemTime.IsChecked;
+            Boolean[] boolValues =
+            {
+                (Boolean)passiveDefenseDamageDinos.IsChecked,
+                (Boolean)pvpRespwanInterval.IsChecked,
+                (Boolean)autoPve.IsChecked,
+                (Boolean)autoPveUsesSystemTime.IsChecked
+            };
 
             GameIni game = new GameIni(int.Parse(levelCap.Text), xpStep, int.Parse(engramStep.Text), int.Parse(lvlStep.Text));
-            settings = game.write();
+            settings = game.write(boolValues, floatValues);
 
             return settings;
         }
 
+        /// <summary>
+        ///     Starts the server upon start click
+        /// </summary>
+        /// 
+        /// <param name="sender">the object that sent this event</param>
+        /// <param name="e">the event arguments</param>
         private void startClick(object sender, RoutedEventArgs e)
         {
             startServer();
         }
 
+        /// <summary>
+        ///     Stops the server upon start click
+        /// </summary>
+        /// 
+        /// <param name="sender">the object that sent this event</param>
+        /// <param name="e">the event arguments</param>
         private void stopClick(object sender, RoutedEventArgs e)
         {
             stopServer();
         }
 
+        /// <summary>
+        ///     Updates the server upon start click
+        /// </summary>
+        /// 
+        /// <param name="sender">the object that sent this event</param>
+        /// <param name="e">the event arguments</param>
         private void updateClick(object sender, RoutedEventArgs e)
         {
             Boolean wasRunning;
@@ -300,6 +383,9 @@ namespace ArkConfigurationTool
             }
         }
 
+        /// <summary>
+        ///     Performs the action of starting the server
+        /// </summary>
         private void startServer()
         {
             // Run start script
@@ -344,6 +430,11 @@ namespace ArkConfigurationTool
             executeCommand(start, true);
         }
 
+        /// <summary>
+        ///     Performs the action of stopping the server
+        /// </summary>
+        /// 
+        /// <returns>true if the server was running before stopping</returns>
         private Boolean stopServer()
         {
             Boolean wasRunning = false;
@@ -372,6 +463,9 @@ namespace ArkConfigurationTool
             return wasRunning;
         }
 
+        /// <summary>
+        ///     Performs the action of updating the server
+        /// </summary>
         private void updateServer()
         {
             // Update server here
@@ -391,6 +485,9 @@ namespace ArkConfigurationTool
             executeCommand(Reference.cmdUpdateServer, false);
         }
 
+        /// <summary>
+        ///     Performs the action of updating the Mods
+        /// </summary>
         private void updateMods()
         {
             // Update mods here
@@ -426,12 +523,22 @@ namespace ArkConfigurationTool
             }
         }
 
+        /// <summary>
+        ///     Toggles the Start and Stop buttons
+        /// </summary>
+        /// 
+        /// <param name="isServerOn">whether the server is turned on</param>
         private void toggleButtons(Boolean isServerOn)
         {
             startButton.IsEnabled = !isServerOn;
             stopButton.IsEnabled = isServerOn;
         }
 
+        /// <summary>
+        ///     Checks if the server can be started
+        /// </summary>
+        /// 
+        /// <returns>true if can start</returns>
         private Boolean canStartServer()
         {
             Boolean canStart = true;
@@ -447,6 +554,13 @@ namespace ArkConfigurationTool
             return canStart;
         }
 
+        /// <summary>
+        ///     Checks if the server exists
+        /// </summary>
+        /// 
+        /// <param name="serverName">The server to check the existance of</param>
+        /// 
+        /// <returns>true if the server exists</returns>
         private Boolean serverExists(String serverName)
         {
             Boolean exists = false;
@@ -459,6 +573,11 @@ namespace ArkConfigurationTool
             return exists;
         }
 
+        /// <summary>
+        ///     Runs the update commands to ensure the server is installed
+        /// </summary>
+        /// 
+        /// <param name="serverName">the name of the server to install</param>
         private void installServer(String serverName)
         {
             updateServer();

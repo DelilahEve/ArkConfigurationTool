@@ -8,9 +8,6 @@ namespace ArkConfigurationTool
 {
     class GameUserIni
     {
-
-        // Keys to Boolean values
-        // ordered false default first then true
         private String[] boolKeys =
         {
             // Default False:
@@ -32,9 +29,7 @@ namespace ArkConfigurationTool
             "disableStructureDecayPVE",
             "pvpStructureDecay",
         };
-
-        // Keys to Float values
-        // default 1.0 first
+        
         private String[] floatKeys =
         {
             // Default 1.0 value
@@ -83,16 +78,33 @@ namespace ArkConfigurationTool
             "maxPlayers"
         };
 
+        /// <summary>
+        ///     Constructs the GameUserIni object for use with GameUserSettings.ini
+        /// </summary>
         public GameUserIni()
         {
 
         }
 
+        /// <summary>
+        ///     Reads the GameUserSettings.ini into the program
+        /// </summary>
         public void read()
         {
 
         }
 
+        /// <summary>
+        ///     Generates a list of settings to be written to file
+        /// </summary>
+        /// 
+        /// <param name="defaultFalse">The boolean values that are false by default</param>
+        /// <param name="defaultTrue">The boolean values that are true by default</param>
+        /// <param name="floatValues">The list of float values to check</param>
+        /// <param name="stringValues">The list of string values to cehck</param>
+        /// <param name="intValues">The list of integer values to check</param>
+        /// 
+        /// <returns>a list of non-default settings to be written to GameUserSettings.ini</returns>
         public List<String> write(Boolean[] defaultFalse, Boolean[] defaultTrue, float[] floatValues, String[] stringValues, int[] intValues)
         {
             List<String> settings = new List<String>();

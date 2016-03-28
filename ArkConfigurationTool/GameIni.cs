@@ -54,6 +54,14 @@ namespace ArkConfigurationTool
             "globalCorpseDecompositionTimeMultiplier"
         };
 
+        /// <summary>
+        ///     Constructs the GameIni class for use with Game.ini file
+        /// </summary>
+        /// 
+        /// <param name="levelCap">The level cap to set one players</param>
+        /// <param name="xpStep">The step in xp between levels</param>
+        /// <param name="engramStep">the step in engrams between level steps</param>
+        /// <param name="levelStep">The step in level for engram steps</param>
         public GameIni(int levelCap, int xpStep, int engramStep, int levelStep)
         {
             this.levelCap = levelCap;
@@ -62,16 +70,46 @@ namespace ArkConfigurationTool
             this.levelStep = levelStep;
         }
 
+        /// <summary>
+        ///     Reads the settings from the Game.ini file
+        /// </summary>
         public void read()
         {
 
         }
 
-        public List<String> write()
+        /// <summary>
+        ///     Generates the list of settings that belongs in Game.ini
+        /// </summary>
+        /// 
+        /// <param name="boolValues">list of boolean values set</param>
+        /// <param name="floatValues">list of float values set</param>
+        /// 
+        /// <returns>a list of settings with only non-default values</returns>
+        public List<String> write(Boolean[] boolValues, float[] floatValues)
         {
             List<String> settings = new List<String>();
 
-            // Output GameIni
+            // Boolean Values
+            for(int i = 0; i < boolValues.Length; i++)
+            {
+                if(boolValues[i])
+                {
+                    settings.Add(boolKeys[i] + "=" + boolValues[i]);
+                }
+            }
+
+            // Float Values
+            for(int i = 0; i < floatValues.Length; i++)
+            {
+                if(floatValues[i] != 1.0f)
+                {
+                    settings.Add(floatKeys[i] + "=" + floatValues[i]);
+                }
+            }
+
+            // Player Level Values
+            settings.AddRange(generatePlayerLevelOverride());
 
             return settings;
         }
@@ -87,6 +125,8 @@ namespace ArkConfigurationTool
             List<String> lines = new List<String>();
             String line = "LevelExperienceRampOverrides=(";
 
+            /* ---------------------- Edit to allow overriding vanilla levels -------------------------- */
+            /* ---------------------- Edit to allow overriding boosted levels -------------------------- */
             int xp = 0;
             for (int i = 0; i < levelCap; i++)
             {
@@ -129,6 +169,8 @@ namespace ArkConfigurationTool
             List<String> lines = new List<String>();
             String line = "LevelExperienceRampOverrides=(";
 
+            /* ---------------------- Edit to allow overriding vanilla levels -------------------------- */
+            /* ---------------------- Edit to allow overriding boosted levels -------------------------- */
             int xp = 0;
             for (int i = 0; i < levelCap; i++)
             {
@@ -158,6 +200,26 @@ namespace ArkConfigurationTool
             lines.Add("overrideMaxExperiencePointsDino=" + xp);
 
             return lines;
+        }
+
+        /// <summary>
+        ///     Generates lines pertaining to Dino characters
+        /// </summary>
+        /// 
+        /// <returns>a list of settings to be applied to dinos</returns>
+        public List<String> generateDinoSettings()
+        {
+            List<String> settings = new List<String>();
+
+            // generate settings from dino tab here
+
+            // allowSpawn
+            // allowTame
+            // spawnRateMultiplier
+            // spawnLimit
+            // overrideAi
+
+            return settings;
         }
 
         /// <summary>
