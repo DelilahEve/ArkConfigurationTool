@@ -9,6 +9,23 @@ namespace ArkConfigurationTool
     class Reference
     {
 
+        public static String serversDirectory = "ArkConfigurationTool\\Servers\\";
+        public static String profilesDirectory = "ArkConfigurationTool\\Profiles\\";
+        public static String logsDirectory = "ArkConfigurationTool\\Logs\\";
+        public static String steamCmdDirectory = "ArkConfigurationTool\\steamCMD\\";
+
+        public static String serverExePath = "\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe";
+
+        // 0 = .exe
+        // 1 = Map
+        // 2 = GameModIds/etc...
+        public static String cmdStartServer = "start " + serversDirectory + "{0}" + serverExePath + " \"{1}?listen{2}\"";
+
+        public static String cmdUpdateServer = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +app_update 346110 validate +quit";
+
+        // 0 = ModId
+        public static String cmdUpdateMod = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +workshop_download_item 346110 {0} +quit";
+
         public static int[] playerLevelXP = {
             0,
             0,

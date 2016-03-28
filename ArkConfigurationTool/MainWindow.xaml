@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ArkConfigurationTool"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="Ark Server Configuration Tool" 
         Height="900" 
         Width="700" >
 
@@ -22,19 +22,34 @@
 
             <MenuItem Header="_File">
 
-                <MenuItem Header="_Open Server..." />
+                <MenuItem 
+                    x:Name="newServer"
+                    Header="_New Server" />
+                
+                <MenuItem 
+                    x:Name="openServer"
+                    Header="_Open Server..." />
+                
                 <Separator />
-                <MenuItem Header="_Close" />
+                
+                <MenuItem 
+                    x:Name="close"
+                    Header="_Close" />
 
             </MenuItem>
 
             <MenuItem Header="_Profiles">
 
-                <MenuItem Header="_Load Profile..." />
-                <MenuItem Header="_Save Profile" />
+                <MenuItem 
+                    x:Name="loadProfile"
+                    Header="_Load Profile..." />
+                
+                <MenuItem 
+                    x:Name="saveProfile"
+                    Header="_Save Profile" />
 
             </MenuItem>
-            
+
             <MenuItem Header="_Help" />
 
         </Menu>
@@ -46,143 +61,334 @@
             <TabItem
                 Header="Basic" >
 
-                <Grid
-                    Margin="8px" >
-
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition Height="7*" />
                     </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    
-                    <!-- Column 0 -->
-                    
-                    <CheckBox
-                        x:Name="joinNotify"
-                        Content="Always notify player joined"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        VerticalAlignment="Center" />
+                    <Grid
+                        Margin="8px" >
 
-                    <CheckBox
-                        x:Name="leaveNotify"
-                        Content="Always notify player left"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        VerticalAlignment="Center" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
 
-                    <CheckBox
-                        x:Name="thirdPerson"
-                        Content="Allow third person"
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        VerticalAlignment="Center" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
 
-                    <CheckBox
-                        x:Name="globalChat"
-                        Content="Global voice chat"
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        VerticalAlignment="Center" />
+                        <!-- Column 0 -->
 
-                    <CheckBox
-                        x:Name="mapLocation"
-                        Content="Show player on map"
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="joinNotify"
+                            Content="Always notify Player Joined"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            VerticalAlignment="Center" />
 
-                    <CheckBox
-                        x:Name="tributeDownloads"
-                        Content="Allow character downloads"
-                        Grid.Row="5"
-                        Grid.Column="0"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="leaveNotify"
+                            Content="Always Notify Player Left"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            IsChecked="True" />
 
-                    <CheckBox
-                        x:Name="proximityChat"
-                        Content="Only local chatbox"
-                        Grid.Row="6"
-                        Grid.Column="0"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="thirdPerson"
+                            Content="Allow Third Person"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            VerticalAlignment="Center" />
 
-                    <!-- Column 1 -->
-                    
-                    <CheckBox
-                        x:Name="serverPve"
-                        Content="PvE (turns off PvP)"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="globalChat"
+                            Content="Global Voice Chat"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            IsChecked="True" />
 
-                    <CheckBox
-                        x:Name="serverHardcore"
-                        Content="Hardcore mode"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="mapLocation"
+                            Content="Show Player On Map"
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            VerticalAlignment="Center" />
 
-                    <CheckBox
-                        x:Name="allowHud"
-                        Content="Force no HUD"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="tributeDownloads"
+                            Content="Allow Character Downloads"
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            VerticalAlignment="Center" />
 
-                    <CheckBox
-                        x:Name="structureDecayPve"
-                        Content="Structure Decay (PvE)"
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="proximityChat"
+                            Content="Only Local Chatbox"
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            VerticalAlignment="Center" />
 
-                    <CheckBox
-                        x:Name="structureDecayPvp"
-                        Content="Structure Decay (PvP)"
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="lootCrates"
+                            Content="Disable Loot Crates"
+                            Grid.Row="7"
+                            Grid.Column="0"
+                            VerticalAlignment="Center" />
 
-                    <CheckBox
-                        x:Name="dinosaurDecay"
-                        Content="Disable dino decay"
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        VerticalAlignment="Center" />
+                        <!-- Column 1 -->
 
-                    <CheckBox
-                        x:Name="flyerCarryPve"
-                        Content="Flyer Carry in PvE"
-                        Grid.Row="6"
-                        Grid.Column="1"
-                        VerticalAlignment="Center" />
-                    
-                    <CheckBox
-                        x:Name="caveBuildPve"
-                        Content="Allow Cave Building (PvE)"
-                        Grid.Row="7"
-                        Grid.Column="1"
-                        VerticalAlignment="Center" />
+                        <CheckBox
+                            x:Name="serverPve"
+                            Content="PvE (Turns Off PvP)"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            VerticalAlignment="Center" />
+
+                        <CheckBox
+                            x:Name="serverHardcore"
+                            Content="Hardcore Mode"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            VerticalAlignment="Center" />
+
+                        <CheckBox
+                            x:Name="allowHud"
+                            Content="Force No HUD"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            VerticalAlignment="Center" />
+
+                        <CheckBox
+                            x:Name="friendlyFire"
+                            Content="Disable Friendly Fire (PvE)"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            VerticalAlignment="Center" />
+
+                        <CheckBox
+                            x:Name="tribeWar"
+                            Content="Allow Tribe War (PvE)"
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            VerticalAlignment="Center" />
+
+                        <CheckBox
+                            x:Name="tribeWarCancel"
+                            Content="Allow Tribe War Cancel (PvE)"
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            VerticalAlignment="Center" />
+
+                        <CheckBox
+                            x:Name="structureDecayPve"
+                            Content="Structure Decay (PvE)"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            IsChecked="True" />
+
+                        <CheckBox
+                            x:Name="structureDecayPvp"
+                            Content="Structure Decay (PvP)"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            IsChecked="True" />
+
+                        <CheckBox
+                            x:Name="dinosaurDecay"
+                            Content="Disable Dino Decay"
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            VerticalAlignment="Center" />
+
+                        <CheckBox
+                            x:Name="flyerCarryPve"
+                            Content="Flyer Carry (PvE)"
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            VerticalAlignment="Center" />
+
+                        <CheckBox
+                            x:Name="caveBuildPve"
+                            Content="Allow Cave Building (PvE)"
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            VerticalAlignment="Center" />
+
+                    </Grid>
+
+                    <Grid
+                        Grid.Row="1">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid
+                            Grid.Column="0">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="3*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Content="Server Name"
+                                VerticalAlignment="Center" />
+
+                            <TextBox
+                                x:Name="serverName"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="8px 0px"
+                                VerticalAlignment="Center"
+                                Text="Ark Server" />
+
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Content="Map"
+                                VerticalAlignment="Center" />
+
+                            <TextBox
+                                x:Name="serverMap"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="8px 0px"
+                                VerticalAlignment="Center"
+                                Text="TheIsland"/>
+
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Content="Autosave (m)"
+                                VerticalAlignment="Center" />
+
+                            <TextBox
+                                x:Name="autosave"
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="8px 0px"
+                                VerticalAlignment="Center"
+                                Text="30" />
+
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Content="Mods"
+                                VerticalAlignment="Center" />
+
+                            <TextBox
+                                x:Name="modList"
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Grid.RowSpan="2"
+                                Margin="8px 16px" />
+
+                            <Label
+                                Grid.Row="5"
+                                Grid.Column="0"
+                                Content="MoTD"
+                                VerticalAlignment="Center" />
+
+                            <TextBox
+                                x:Name="motd"
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                Grid.RowSpan="2"
+                                Margin="8px 16px" />
+
+                        </Grid>
+
+                        <Grid
+                            Grid.Column="1">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="4*" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBox
+                                x:Name="consoleOutput"
+                                Margin="8px 16px"
+                                Grid.ColumnSpan="3"
+                                IsEnabled="False" />
+
+                            <Button
+                                x:Name="startButton"
+                                Width="100px"
+                                Height="35px"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Content="Start"
+                                Click="startClick" />
+
+                            <Button
+                                x:Name="updateButton"
+                                Width="100px"
+                                Height="35px"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Content="Update"
+                                Click="updateClick" />
+
+                            <Button
+                                x:Name="stopButton"
+                                Width="100px"
+                                Height="35px"
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Content="Stop"
+                                Click="stopClick" />
+
+                        </Grid>
+
+                    </Grid>
 
                 </Grid>
-                
+
             </TabItem>
 
             <TabItem
-                Header="Advanced">
+                Header="Server">
 
                 <Grid
                     Margin="8px">
@@ -214,27 +420,15 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition />
-                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    
-                    <!-- Column 0 & 1 -->
-                    
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Content="Structure placement distance"
-                        VerticalAlignment="Center" />
-                    
-                    <TextBox
-                        x:Name="structureDistance"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="0"
-                        Grid.Column="1" />
+
+                    <!-- Server settings go here -->
 
                     <Label
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Grid.Column="0"
                         Content="Difficulty"
                         VerticalAlignment="Center" />
@@ -243,8 +437,452 @@
                         x:Name="difficulty"
                         VerticalAlignment="Center"
                         Margin="8px"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="4.0"/>
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Content="Player Damage Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="playerDamage"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Content="Dino Damage Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="dinoDamage"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Content="Structure Damage Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="structureDamage"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Content="Player Resistance Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="playerResist"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        Content="Dino Resistance Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="dinoResist"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="6"
+                        Grid.Column="1" 
+                        Text="1.0"/>
+
+                    <Label
+                        Grid.Row="7"
+                        Grid.Column="0"
+                        Content="Structure Resistance Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="structureResist"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="7"
+                        Grid.Column="1" 
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="9"
+                        Grid.Column="0"
+                        Content="Player Water Drain Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="playerWater"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="9"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="10"
+                        Grid.Column="0"
+                        Content="Player Food Drain Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="playerFood"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="11"
+                        Grid.Column="0"
+                        Content="Player Stamina Drain Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="playerStamina"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="11"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="12"
+                        Grid.Column="0"
+                        Content="Player Health Regen Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="playerHealth"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="12"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="13"
+                        Grid.Column="0"
+                        Content="Dino Food Drain Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="dinoFood"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="13"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="14"
+                        Grid.Column="0"
+                        Content="Dino Stamina Drain Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="dinoStamina"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="14"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="15"
+                        Grid.Column="0"
+                        Content="Dino Health Regen Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="dinoHealth"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="15"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <CheckBox
+                        x:Name="pvpRespwanInterval"
+                        Grid.Row="17"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Content="Increase PvP Respawn Interval"
+                        VerticalAlignment="Center" />
+
+                    <Label
+                        Grid.Row="18"
+                        Grid.Column="0"
+                        Content="PvP Respawn Check Period"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="pvpRespawn"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="18"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="19"
+                        Grid.Column="0"
+                        Content="PvP Respawn Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="pvpRespawnMultiplier"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="19"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="20"
+                        Grid.Column="0"
+                        Content="PvP Respawn Base Time"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="pvpRespawnBase"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="20"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <!-- Columns 3 & 4 -->
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        Content="Maximum Players"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="maxPlayers"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Text="50" />
+
+                    <Label
                         Grid.Row="1"
-                        Grid.Column="1" />
+                        Grid.Column="3"
+                        Content="Server Password"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="serverPassword"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="1"
+                        Grid.Column="4" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Content="Admin Password"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="adminPassword"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="2"
+                        Grid.Column="4" />
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="3"
+                        Content="Spectator Password"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="spectatorPassword"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="3"
+                        Grid.Column="4" />
+
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="3"
+                        Content="Ban List URL"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="banList"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="4"
+                        Grid.Column="4" />
+
+                    <Label
+                        Grid.Row="6"
+                        Grid.Column="3"
+                        Content="XP Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="xpMultiplier"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="6"
+                        Grid.Column="4" 
+                        Text="1.0" />
+
+                    <CheckBox x:Name="autoPve"
+                        Grid.Row="8"
+                        Grid.Column="3"
+                        Grid.ColumnSpan="2"
+                        Content="Auto PvE Timer"
+                        VerticalAlignment="Center" />
+
+                    <CheckBox x:Name="autoPveUsesSystemTime"
+                        Grid.Row="9"
+                        Grid.Column="3"
+                        Grid.ColumnSpan="2"
+                        Content="Auto PvE uses System Time"
+                        VerticalAlignment="Center" />
+
+                    <Label
+                        Grid.Row="10"
+                        Grid.Column="3"
+                        Content="Auto PvE Start Time"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="pveStart"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="10"
+                        Grid.Column="4" 
+                        Text="" />
+
+                    <Label
+                        Grid.Row="11"
+                        Grid.Column="3"
+                        Content="Auto PvE Stop Time"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="pveStop"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="11"
+                        Grid.Column="4" 
+                        Text="" />
+
+                    <Label
+                        Grid.Row="13"
+                        Grid.Column="3"
+                        Content="Recipe Effectiveness"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="recipeEffectiveness"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="13"
+                        Grid.Column="4" 
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="14"
+                        Grid.Column="3"
+                        Content="Recipe Skill Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="recipeSkill"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="14"
+                        Grid.Column="4" 
+                        Text="1.0" />
+
+                </Grid>
+
+            </TabItem>
+
+            <TabItem
+                Header="World">
+
+                <Grid
+                    Margin="8px">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Column 0 & 1 -->
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="Max Structures in Range"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="structureDistance"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="1.0" />
 
                     <Label
                         Grid.Row="2"
@@ -257,7 +895,8 @@
                         VerticalAlignment="Center"
                         Margin="8px"
                         Grid.Row="2"
-                        Grid.Column="1" />
+                        Grid.Column="1"
+                        Text="1.0" />
 
                     <Label
                         Grid.Row="3"
@@ -270,101 +909,67 @@
                         VerticalAlignment="Center"
                         Margin="8px"
                         Grid.Row="3"
-                        Grid.Column="1" />
+                        Grid.Column="1"
+                        Text="1.0" />
 
                     <Label
-                        Grid.Row="5"
+                        Grid.Row="4"
                         Grid.Column="0"
-                        Content="Player Damage Multiplier"
+                        Content="Day/Night Cycle Scale"
                         VerticalAlignment="Center" />
 
                     <TextBox
-                        x:Name="playerDamage"
+                        x:Name="dayCycle"
                         VerticalAlignment="Center"
                         Margin="8px"
-                        Grid.Row="5"
-                        Grid.Column="1" />
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Text="1.0" />
 
                     <Label
                         Grid.Row="6"
                         Grid.Column="0"
-                        Content="Dino Damage Multiplier"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="dinoDamage"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="6"
-                        Grid.Column="1" />
-
-                    <Label
-                        Grid.Row="7"
-                        Grid.Column="0"
-                        Content="Structure Damage Multiplier"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="structureDamage"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="7"
-                        Grid.Column="1" />
-
-                    <Label
-                        Grid.Row="8"
-                        Grid.Column="0"
-                        Content="Player Resistance Multiplier"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="playerResist"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="8"
-                        Grid.Column="1" />
-
-                    <Label
-                        Grid.Row="9"
-                        Grid.Column="0"
-                        Content="Dino Resistance Multiplier"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="dinoResist"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="9"
-                        Grid.Column="1" />
-
-                    <Label
-                        Grid.Row="10"
-                        Grid.Column="0"
-                        Content="Structure Resistance Multiplier"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="structureResist"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="10"
-                        Grid.Column="1" />
-
-                    <Label
-                        Grid.Row="11"
-                        Grid.Column="0"
-                        Content="Structure Decay Multiplier"
+                        Content="Structure Decay Multiplier (PvP)"
                         VerticalAlignment="Center" />
 
                     <TextBox
                         x:Name="structureDecayMultiplier"
                         VerticalAlignment="Center"
                         Margin="8px"
-                        Grid.Row="11"
-                        Grid.Column="1" />
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Text="1.0" />
 
                     <Label
-                        Grid.Row="13"
+                        Grid.Row="7"
+                        Grid.Column="0"
+                        Content="Structure Decay Multiplier (PvE)"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="pveStructureDecayMultiplier"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="7"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        Content="Structure Decay Destruction Period (PvE)"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="pveStructureDestructionPeriod"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="8"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="10"
                         Grid.Column="0"
                         Content="Dino Count Multiplier"
                         VerticalAlignment="Center" />
@@ -373,79 +978,113 @@
                         x:Name="dinoCount"
                         VerticalAlignment="Center"
                         Margin="8px"
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="12"
+                        Grid.Column="0"
+                        Content="Platform Saddle Structure Limit"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="saddleStructureLimit"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="12"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
                         Grid.Row="13"
-                        Grid.Column="1" />
+                        Grid.Column="0"
+                        Content="Per Platform Structure Multiplier"
+                        VerticalAlignment="Center" />
 
-                    <!-- Column 2 & 3 -->
-                    
+                    <TextBox
+                        x:Name="perPlatformStructureMultiplier"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="13"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="15"
+                        Grid.Column="0"
+                        Content="Mating Interval"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="matingInterval"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="15"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="16"
+                        Grid.Column="0"
+                        Content="Egg Hatch Speed Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="eggHatch"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="16"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="17"
+                        Grid.Column="0"
+                        Content="Baby Mature Speed Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="babyMature"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="17"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="18"
+                        Grid.Column="0"
+                        Content="Baby Food Consume Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="babyFood"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="18"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="19"
+                        Grid.Column="0"
+                        Content="Lay Egg Interval"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="eggInterval"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="19"
+                        Grid.Column="1"
+                        Text="1.0" />
+
+                    <!-- Column 3 & 4 -->
+
                     <Label
                         Grid.Row="0"
-                        Grid.Column="2"
-                        Content="Maximum Players"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="maxPlayers"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="0"
-                        Grid.Column="3" />
-
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Content="Server Password"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="serverPassword"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="1"
-                        Grid.Column="3" />
-
-                    <Label
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        Content="Admin Password"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="adminPassword"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="2"
-                        Grid.Column="3" />
-
-                    <Label
-                        Grid.Row="3"
-                        Grid.Column="2"
-                        Content="Spectator Password"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="spectatorPassword"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="3"
-                        Grid.Column="3" />
-
-                    <Label
-                        Grid.Row="4"
-                        Grid.Column="2"
-                        Content="Ban List URL"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="banList"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="4"
-                        Grid.Column="3" />
-
-                    <Label
-                        Grid.Row="6"
-                        Grid.Column="2"
+                        Grid.Column="3"
                         Content="Taming Multiplier"
                         VerticalAlignment="Center" />
 
@@ -453,12 +1092,13 @@
                         x:Name="tameMultiplier"
                         VerticalAlignment="Center"
                         Margin="8px"
-                        Grid.Row="6"
-                        Grid.Column="3" />
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Text="1.0" />
 
                     <Label
-                        Grid.Row="7"
-                        Grid.Column="2"
+                        Grid.Row="2"
+                        Grid.Column="3"
                         Content="Harvest Multiplier"
                         VerticalAlignment="Center" />
 
@@ -466,12 +1106,13 @@
                         x:Name="harvestMultiplier"
                         VerticalAlignment="Center"
                         Margin="8px"
-                        Grid.Row="7"
-                        Grid.Column="3" />
+                        Grid.Row="2"
+                        Grid.Column="4"
+                        Text="1.0" />
 
                     <Label
-                        Grid.Row="8"
-                        Grid.Column="2"
+                        Grid.Row="3"
+                        Grid.Column="3"
                         Content="Resource Health Multiplier"
                         VerticalAlignment="Center" />
 
@@ -479,12 +1120,13 @@
                         x:Name="resourceHealth"
                         VerticalAlignment="Center"
                         Margin="8px"
-                        Grid.Row="8"
-                        Grid.Column="3" />
+                        Grid.Row="3"
+                        Grid.Column="4"
+                        Text="1.0" />
 
                     <Label
-                        Grid.Row="9"
-                        Grid.Column="2"
+                        Grid.Row="4"
+                        Grid.Column="3"
                         Content="Resource Respawn Multiplier"
                         VerticalAlignment="Center" />
 
@@ -492,99 +1134,143 @@
                         x:Name="resourceRespawn"
                         VerticalAlignment="Center"
                         Margin="8px"
+                        Grid.Row="4"
+                        Grid.Column="4"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="3"
+                        Content="Resource Replenish Radius (Player)"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="resourceReplenishPlayer"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="5"
+                        Grid.Column="4"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="6"
+                        Grid.Column="3"
+                        Content="Resource Replenish Radius (Struct)"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="resourceReplenishStructure"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="6"
+                        Grid.Column="4"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="8"
+                        Grid.Column="3"
+                        Content="Crop Growth Multiplier"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="cropGrowth"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="8"
+                        Grid.Column="4"
+                        Text="1.0" />
+
+                    <Label
                         Grid.Row="9"
-                        Grid.Column="3" />
-
-                    <Label
-                        Grid.Row="11"
-                        Grid.Column="2"
-                        Content="Player Water Drain Multiplier"
+                        Grid.Column="3"
+                        Content="Crop Decay Multiplier"
                         VerticalAlignment="Center" />
 
                     <TextBox
-                        x:Name="playerWater"
+                        x:Name="cropDecay"
                         VerticalAlignment="Center"
                         Margin="8px"
-                        Grid.Row="11"
-                        Grid.Column="3" />
+                        Grid.Row="9"
+                        Grid.Column="4"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="10"
+                        Grid.Column="3"
+                        Content="Poop Interval"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="poopInterval"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="10"
+                        Grid.Column="4"
+                        Text="1.0" />
 
                     <Label
                         Grid.Row="12"
-                        Grid.Column="2"
-                        Content="Player Food Drain Multiplier"
+                        Grid.Column="3"
+                        Content="Structure Damage Cooldown"
                         VerticalAlignment="Center" />
 
                     <TextBox
-                        x:Name="playerFood"
-                        VerticalAlignment="Center"
-                        Margin="8px"
+                        x:Name="structureDamageCooldown"
+                        VerticalAlignment="Top"
+                        Margin="8,8,8,0"
                         Grid.Row="12"
-                        Grid.Column="3" />
+                        Grid.Column="4"
+                        Text="1.0" />
 
-                    <Label
-                        Grid.Row="13"
-                        Grid.Column="2"
-                        Content="Player Stamina Drain Multiplier"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="playerStamina"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="13"
-                        Grid.Column="3" />
-
-                    <Label
+                    <CheckBox
+                        x:Name="passiveDefenseDamageDinos"
                         Grid.Row="14"
-                        Grid.Column="2"
-                        Content="Player Health Regen Multiplier"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="playerHealth"
+                        Grid.Column="3"
+                        Grid.ColumnSpan="2"
                         VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="14"
-                        Grid.Column="3" />
+                        Content="Passive Defenses Damage Riderless Dinos" />
 
                     <Label
                         Grid.Row="15"
-                        Grid.Column="2"
-                        Content="Dino Food Drain Multiplier"
+                        Grid.Column="3"
+                        Content="Dino  Turret Damage"
                         VerticalAlignment="Center" />
 
                     <TextBox
-                        x:Name="dinoFood"
+                        x:Name="dinoTurretDamage"
                         VerticalAlignment="Center"
                         Margin="8px"
                         Grid.Row="15"
-                        Grid.Column="3" />
-
-                    <Label
-                        Grid.Row="16"
-                        Grid.Column="2"
-                        Content="Dino Stamina Drain Multiplier"
-                        VerticalAlignment="Center" />
-
-                    <TextBox
-                        x:Name="dinoStamina"
-                        VerticalAlignment="Center"
-                        Margin="8px"
-                        Grid.Row="16"
-                        Grid.Column="3" />
+                        Grid.Column="4"
+                        Text="1.0" />
 
                     <Label
                         Grid.Row="17"
-                        Grid.Column="2"
-                        Content="Dino Health Regen Multiplier"
+                        Grid.Column="3"
+                        Content="Dino Harvest Damage"
                         VerticalAlignment="Center" />
 
                     <TextBox
-                        x:Name="dinoHealth"
+                        x:Name="dinoHarvestDamage"
                         VerticalAlignment="Center"
                         Margin="8px"
                         Grid.Row="17"
-                        Grid.Column="3" />
+                        Grid.Column="4"
+                        Text="1.0" />
+
+                    <Label
+                        Grid.Row="18"
+                        Grid.Column="3"
+                        Content="Player Harvest Damage"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="playerHarvestDamage"
+                        VerticalAlignment="Center"
+                        Margin="8px"
+                        Grid.Row="18"
+                        Grid.Column="4"
+                        Text="1.0" />
 
                 </Grid>
 
@@ -619,7 +1305,8 @@
                             x:Name="levelCap"
                             Grid.Column="1"
                             Margin="8px"
-                            VerticalAlignment="Center" />
+                            VerticalAlignment="Center"
+                            Text="94" />
 
                         <Grid
                             Grid.Column="2">
@@ -635,7 +1322,7 @@
                                 <ColumnDefinition Width="5*" />
                                 <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
-                            
+
                             <Label
                                 Content="Engram Step:"
                                 Grid.Column="1"
@@ -643,13 +1330,14 @@
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Right"
                                 Margin="12px 0px"/>
-                            
+
                             <TextBox
                                 x:Name="engramStep"
                                 Grid.Column="2"
                                 Grid.Row="0"
                                 VerticalAlignment="Center"
-                                Margin="8px 0px" />
+                                Margin="8px 0px"
+                                Text="4" />
 
                             <Label
                                 Content="Level Step:"
@@ -664,20 +1352,21 @@
                                 Grid.Column="2"
                                 Grid.Row="1"
                                 VerticalAlignment="Center"
-                                Margin="8px 0px" />
+                                Margin="8px 0px"
+                                Text="10"/>
 
                             <CheckBox
                                 Grid.Column="0"
                                 Grid.Row="2"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center" />
-                            
+
                             <Label
                                 Content="Override vanilla level cap settings"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 VerticalAlignment="Center"/>
-                            
+
                         </Grid>
 
                     </Grid>
@@ -725,11 +1414,11 @@
                                     CanUserResize="False" />
 
                             </DataGrid.Columns>
-                            
+
                         </DataGrid>
-                        
+
                     </Grid>
-                    
+
                 </Grid>
 
             </TabItem>
@@ -759,14 +1448,20 @@
                             CanUserSort="False"
                             CanUserResize="False" />
 
-                        <DataGridTextColumn 
-                            Header="Spawn Rate Multiplier"
+                        <DataGridCheckBoxColumn 
+                            Header="Allow Tame"
                             CanUserReorder="False"
                             CanUserSort="False"
                             CanUserResize="False" />
 
                         <DataGridTextColumn 
-                            Header="Spawn Limit Percent"
+                            Header="Spawn Rate"
+                            CanUserReorder="False"
+                            CanUserSort="False"
+                            CanUserResize="False" />
+
+                        <DataGridTextColumn 
+                            Header="Spawn Limit %"
                             CanUserReorder="False"
                             CanUserSort="False"
                             CanUserResize="False" />
@@ -855,7 +1550,7 @@
                             http://github.com/DelilahEve/ArkConfigurationTool/
                             
                         </Hyperlink>
-                        
+
                     </TextBlock>
 
                     <TextBlock
@@ -872,40 +1567,32 @@
                             DelilahEve
                             
                         </Hyperlink>
-                        
+
                     </TextBlock>
-                    
+
                 </Grid>
 
             </TabItem>
 
         </TabControl>
-        
+
         <Grid
             Grid.Row="1">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="3*" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            
-            <Button
-                Content="Reset Fields"
-                Grid.Column="2"
-                Height="35px"
-                Margin="12px" />
 
             <Button
-                Content="Generate"
+                Content="Save Changes"
                 Grid.Column="3"
                 Height="35px"
                 Margin="12px"
                 Click="generateClick" />
 
         </Grid>
-        
+
     </Grid>
-    
+
 </Window>
