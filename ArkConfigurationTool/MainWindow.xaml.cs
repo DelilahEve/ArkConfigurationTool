@@ -22,6 +22,9 @@ namespace ArkConfigurationTool
 
         private int xpStep = 40000;
 
+        private Boolean isFirstRun = true;
+        private Boolean isDebugMode = true;
+
         private List<String> serverNames;
         private List<String> profiles;
 
@@ -41,16 +44,134 @@ namespace ArkConfigurationTool
         }
 
         /// <summary>
+        ///     Sets up the environment for the configuration tool
+        /// </summary>
+        public void performSetup()
+        {
+
+            ConfigData settings = new ConfigData("settings", "ArkConfigurationTool\\");
+
+            List<String> options = new List<String>();
+
+            String[] keys =
+            {
+                "isFirstRun",
+                "isDebugMode",
+                "serverList",
+                "profileList"
+            };
+
+            String[] values =
+            {
+                "0",
+                "0",
+                "",
+                ""
+            };
+
+            if (!File.Exists("ArkConfigurationTool\\settings.act"))
+            {
+                /*  
+                    no config file, set up:
+
+                    Create directories
+                    Install SteamCMD
+                    Create config file
+                */
+
+                // Create server list string
+                String serverList = "";
+
+                for(int i = 0; i < serverNames.Count; i++)
+                {
+                    serverList += serverNames[i];
+
+                    if(i != serverNames.Count-1)
+                    {
+                        serverList += ",";
+                    }
+                }
+
+                values[2] = serverList;
+
+                // create profile list string
+                String profileList = "";
+
+                for(int i = 0; i < profiles.Count; i++)
+                {
+                    profileList += profiles[i];
+
+                    if(i != profiles.Count-1)
+                    {
+                        profileList += ",";
+                    }
+                }
+
+                values[3] = profileList;
+
+                // create options list
+                for(int i = 0; i < keys.Length; i++)
+                {
+                    options.Add(keys[i] + "=" + values[i]);
+                }
+
+                // Write to file
+                settings.write(options);
+            }
+            else
+            {
+                // load settings
+                options = settings.read();
+
+                for(int i = 0; i < options.Count; i++)
+                {
+                    String[] option = options[i].Split('=');
+
+                    String key = option[0];
+                    String value = option[1];
+
+                    switch(options[i])
+                    {
+                        case "isFirstRun":
+                            values[0] = value;
+                            break;
+                        case "isDebugMode":
+                            values[1] = value;
+                            break;
+                        case "serverList":
+                            values[2] = value;
+                            break;
+                        case "profileList":
+                            values[3] = value;
+                            break;
+                    }
+                }
+            }
+
+            isFirstRun = values[0] == "1" ? true : false;
+            isDebugMode = values[1] == "1" ? true : false;
+
+            // set server and profile list
+
+        }
+
+        /// <summary>
         ///     Loads the current servers, profiles, etc...
         /// </summary>
         public void load()
         {
             // Check Folder exists
+            if(!Directory.Exists(Reference.serversDirectory))
+            {
+                Directory.CreateDirectory(Reference.serversDirectory);
+            }
 
             // load servers
             serverNames.AddRange(Directory.GetDirectories(Reference.serversDirectory));
-            foreach(String server in serverNames)
+            for (int i = 0; i < serverNames.Count; i++)
             {
+                String server = serverNames[i].Substring(29);
+
                 MenuItem item = new MenuItem();
                 item.Header = server;
                 item.Click += new RoutedEventHandler(loadServer);
@@ -58,11 +179,17 @@ namespace ArkConfigurationTool
             }
 
             // Check Folder exists
+            if (!Directory.Exists(Reference.profilesDirectory))
+            {
+                Directory.CreateDirectory(Reference.profilesDirectory);
+            }
 
             // load profiles
             profiles.AddRange(Directory.GetDirectories(Reference.profilesDirectory));
-            foreach(String profile in profiles)
+            for (int i = 0; i < profiles.Count; i++)
             {
+                String profile = profiles[i].Substring(30);
+
                 MenuItem item = new MenuItem();
                 item.Header = profile;
                 item.Click += new RoutedEventHandler(loadServerProfile);
