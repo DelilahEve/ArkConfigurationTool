@@ -103,6 +103,8 @@ namespace ArkConfigurationTool
                         lines.Add(line);
                     }
                 }
+
+                reader.Close();
             }
 
             return lines;
@@ -243,11 +245,24 @@ namespace ArkConfigurationTool
 
             // generate settings from dino tab here
 
+            // dinoTag
             // allowSpawn
             // allowTame
             // spawnRateMultiplier
             // spawnLimit
             // overrideAi
+
+            return settings;
+        }
+
+        public List<String> generateEngramSettings()
+        {
+            List<String> settings = new List<String>();
+
+            // engramTag
+            // hideEngram
+            // epCost
+            // levelReq
 
             return settings;
         }
@@ -355,6 +370,8 @@ namespace ArkConfigurationTool
                 {
                     writer.WriteLine(l);
                 }
+
+                writer.Close();
             }
         }
     }

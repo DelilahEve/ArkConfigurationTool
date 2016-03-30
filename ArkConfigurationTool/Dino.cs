@@ -8,7 +8,7 @@ namespace ArkConfigurationTool
 {
     class Dino
     {
-        public Dino[] dinos =
+        public static Dino[] dinos =
         {
             new Dino("Anky"),
             new Dino("Argent"),
@@ -37,12 +37,12 @@ namespace ArkConfigurationTool
             new Dino("Turtle")
         };
 
-        private String tag;
-        private Boolean allowSpawn;
-        private Boolean allowTame;
-        private float spawnRate;
-        private float spawnLimit;
-        private String overrideAiTag;
+        public String tag { get; set; }
+        public Boolean allowSpawn { get; set; }
+        public Boolean allowTame { get; set; }
+        public float spawnRate { get; set; }
+        public float spawnLimit { get; set; }
+        public String overrideAiTag { get; set; }
 
         /// <summary>
         ///     Builds a default dino from it's tag

@@ -58,8 +58,10 @@
     </ApplicationDefinition>
     <Compile Include="ConfigData.cs" />
     <Compile Include="Dino.cs" />
+    <Compile Include="Engram.cs" />
     <Compile Include="GameIni.cs" />
     <Compile Include="GameUserIni.cs" />
+    <Compile Include="Level.cs" />
     <Compile Include="Reference.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

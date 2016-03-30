@@ -17,13 +17,12 @@ using System.Diagnostics;
 using System.Net;
 using System.IO.Compression;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace ArkConfigurationTool
 {
     public partial class MainWindow : Window
     {
-
-        private int xpStep = 40000;
 
         private Boolean isFirstRun = true;
         private Boolean isDebugMode = true;
@@ -44,6 +43,8 @@ namespace ArkConfigurationTool
             profiles = new List<string>();
 
             performSetup();
+
+            toggleButtons(false);
 
             load();
         }
@@ -75,14 +76,6 @@ namespace ArkConfigurationTool
 
             if (!File.Exists("ArkConfigurationTool\\settings.act"))
             {
-                /*  
-                    no config file, set up:
-
-                    Create directories
-                    Install SteamCMD
-                    Create config file
-                */
-
                 // Create Directories
                 String[] dirs =
                 {
@@ -247,7 +240,6 @@ namespace ArkConfigurationTool
             // load servers
             if(serverNames.Count > 0)
             {
-                serverNames.AddRange(Directory.GetDirectories(Reference.serversDirectory));
                 for (int i = 0; i < serverNames.Count; i++)
                 {
                     if (serverNames[i].Equals(""))
@@ -255,7 +247,7 @@ namespace ArkConfigurationTool
                         continue;
                     }
 
-                    String server = serverNames[i].Substring(29);
+                    String server = serverNames[i];
 
                     MenuItem item = new MenuItem();
                     item.Header = server;
@@ -273,7 +265,6 @@ namespace ArkConfigurationTool
             // load profiles
             if(profiles.Count > 0)
             {
-                profiles.AddRange(Directory.GetDirectories(Reference.profilesDirectory));
                 for (int i = 0; i < profiles.Count; i++)
                 {
                     if (profiles[i].Equals(""))
@@ -281,7 +272,7 @@ namespace ArkConfigurationTool
                         continue;
                     }
 
-                    String profile = profiles[i].Substring(30);
+                    String profile = profiles[i];
 
                     MenuItem item = new MenuItem();
                     item.Header = profile;
@@ -289,6 +280,11 @@ namespace ArkConfigurationTool
                     loadProfile.Items.Add(item);
                 }
             }
+            
+            // Display Tables
+            displayLevelTable();
+            displayDinoTable();
+            displayEngramTable();
         }
 
         /// <summary>
@@ -365,7 +361,9 @@ namespace ArkConfigurationTool
         /// <param name="e">Arguments for the event</param>
         private void loadServerProfile(Object sender, RoutedEventArgs e)
         {
-            // load settings from profile
+            String profileName = (sender as MenuItem).Header.ToString();
+            
+            // load profile using name
         }
 
 
@@ -377,7 +375,8 @@ namespace ArkConfigurationTool
         /// <param name="e">Arguments for the event</param>
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            // open link here
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
 
 
@@ -611,7 +610,7 @@ namespace ArkConfigurationTool
                 (Boolean)autoPveUsesSystemTime.IsChecked
             };
 
-            GameIni game = new GameIni(int.Parse(levelCap.Text), xpStep, int.Parse(engramStep.Text), int.Parse(lvlStep.Text));
+            GameIni game = new GameIni(int.Parse(levelCap.Text), Reference.xpStep, int.Parse(engramStep.Text), int.Parse(lvlStep.Text));
             settings = game.write(boolValues, floatValues);
 
             return settings;
@@ -679,30 +678,26 @@ namespace ArkConfigurationTool
                 handleOutput(line);
             }
 
-            if(!canStartServer())
+            if(canStartServer())
             {
-                // error
+                String[] startArgs = new String[3]
+                {
+                    serverName.Text,
+                    serverMap.Text,
+                    ""
+                };
 
-                return;
+                String extras = "";
+                if (!modList.Text.Equals(""))
+                {
+                    extras += "?GameModIds=" + modList;
+                }
+
+                startArgs[2] = extras;
+
+                String start = String.Format(Reference.cmdStartServer, startArgs);
+                executeCommand(start, true);
             }
-
-            String[] startArgs = new String[3]
-            {
-                serverName.Text,
-                serverMap.Text,
-                ""
-            };
-
-            String extras = "";
-            if(!modList.Text.Equals(""))
-            {
-                extras += "?GameModIds=" + modList;
-            }
-
-            startArgs[2] = extras;
-
-            String start = String.Format(Reference.cmdStartServer, startArgs);
-            executeCommand(start, true);
         }
 
         /// <summary>
@@ -757,7 +752,9 @@ namespace ArkConfigurationTool
                 handleOutput(line);
             }
 
-            String update = String.Format(Reference.cmdUpdateServer, serverName.Text);
+            String path = System.IO.Path.GetFullPath(Reference.serversDirectory + serverName.Text);
+
+            String update = String.Format(Reference.cmdUpdateServer, path);
             executeCommand(update, false);
         }
 
@@ -793,7 +790,9 @@ namespace ArkConfigurationTool
                 lines.Add("=====================================");
                 lines.Add("");
 
-                String updateMods = String.Format(Reference.cmdUpdateMod, mods[i]);
+                String path = System.IO.Path.GetFullPath(Reference.serversDirectory + serverName.Text);
+
+                String updateMods = String.Format(Reference.cmdUpdateMod, path, mods[i]);
 
                 executeCommand(Reference.cmdUpdateMod, false);
             }
@@ -858,6 +857,63 @@ namespace ArkConfigurationTool
         {
             updateServer();
             updateMods();
+        }
+
+        /// <summary>
+        ///     Outputs the Levels table
+        /// </summary>
+        private void displayLevelTable()
+        {
+            ObservableCollection<Level> levels = new ObservableCollection<Level>();
+
+            int cap = int.Parse(levelCap.Text);
+            int epStep = int.Parse(engramStep.Text);
+            int levelStep = int.Parse(lvlStep.Text);
+
+            List<int> xpRamp = Reference.generateLevelRamp(cap);
+            List<int> epRamp = Reference.generateEpRamp(cap, epStep, levelStep);
+
+            for (int i = 2; i <= cap; i++)
+            {
+                int lvl = i;
+                int difference = xpRamp[i] - xpRamp[i - 1];
+                int xp = xpRamp[i];
+                int ep = epRamp[i];
+
+                Level level = new Level(lvl, difference, xp, ep);
+
+                levels.Add(level);
+            }
+
+            levelGrid.ItemsSource = levels;
+        }
+
+        /// <summary>
+        ///     Outputs the Dinosaur table
+        /// </summary>
+        private void displayDinoTable()
+        {
+            ObservableCollection<Dino> dinos = new ObservableCollection<Dino>();
+            foreach(Dino d in Dino.dinos)
+            {
+                dinos.Add(d);
+            }
+            
+            dinoGrid.ItemsSource = dinos;
+        }
+
+        /// <summary>
+        ///     Outputs the Engram table
+        /// </summary>
+        private void displayEngramTable()
+        {
+            ObservableCollection<Engram> engrams = new ObservableCollection<Engram>();
+            foreach(Engram e in Engram.engrams)
+            {
+                engrams.Add(e);
+            }
+
+            engramGrid.ItemsSource = engrams;
         }
     }
 }

@@ -1375,47 +1375,12 @@
                         Grid.Row="1" >
 
                         <DataGrid
+                            x:Name="levelGrid"
                             HorizontalAlignment="Stretch" 
                             HorizontalContentAlignment="Stretch" 
                             ColumnWidth="*"
-                            AlternatingRowBackground="Gray"
-                            SelectionMode="Single" >
-
-                            <DataGrid.Columns >
-
-                                <DataGridTextColumn 
-                                    Header="Level"
-                                    CanUserReorder="False"
-                                    CanUserSort="False"
-                                    CanUserResize="False" />
-
-                                <DataGridTextColumn 
-                                    Header="Total XP for Level"
-                                    CanUserReorder="False"
-                                    CanUserSort="False"
-                                    CanUserResize="False" />
-
-                                <DataGridTextColumn 
-                                    Header="XP Difference"
-                                    CanUserReorder="False"
-                                    CanUserSort="False"
-                                    CanUserResize="False" />
-
-                                <DataGridTextColumn 
-                                    Header="EP for Level"
-                                    CanUserReorder="False"
-                                    CanUserSort="False"
-                                    CanUserResize="False" />
-
-                                <DataGridTextColumn 
-                                    Header="XP Difference"
-                                    CanUserReorder="False"
-                                    CanUserSort="False"
-                                    CanUserResize="False" />
-
-                            </DataGrid.Columns>
-
-                        </DataGrid>
+                            AlternatingRowBackground="#FFD1D1D1"
+                            SelectionMode="Single" />
 
                     </Grid>
 
@@ -1427,54 +1392,14 @@
                 Header="Dinosaurs">
 
                 <DataGrid
+                    x:Name="dinoGrid"
                     HorizontalAlignment="Stretch" 
                     HorizontalContentAlignment="Stretch" 
                     ColumnWidth="*"
-                    AlternatingRowBackground="Gray"
+                    AlternatingRowBackground="#FFD1D1D1"
                     SelectionMode="Single"
-                    Margin="12px" >
-
-                    <DataGrid.Columns >
-
-                        <DataGridComboBoxColumn 
-                            Header="Dino Tag"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                        <DataGridCheckBoxColumn 
-                            Header="Allow Spawn"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                        <DataGridCheckBoxColumn 
-                            Header="Allow Tame"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                        <DataGridTextColumn 
-                            Header="Spawn Rate"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                        <DataGridTextColumn 
-                            Header="Spawn Limit %"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                        <DataGridComboBoxColumn
-                            Header="Override AI"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                    </DataGrid.Columns>
-
-                </DataGrid>
+                    Margin="12px"
+                    CanUserAddRows="False" />
 
             </TabItem>
 
@@ -1482,42 +1407,13 @@
                 Header="Crafting/Engrams">
 
                 <DataGrid
+                    x:Name="engramGrid"
                     HorizontalAlignment="Stretch" 
                     HorizontalContentAlignment="Stretch" 
+                    AlternatingRowBackground="#FFD1D1D1"
                     ColumnWidth="*"
-                    AlternatingRowBackground="Gray"
                     SelectionMode="Single"
-                    Margin="12px" >
-
-                    <DataGrid.Columns >
-
-                        <DataGridTextColumn 
-                            Header="Engram"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                        <DataGridTextColumn 
-                            Header="Hide Engram"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                        <DataGridTextColumn 
-                            Header="EP Cost"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                        <DataGridTextColumn 
-                            Header="Level Requirement"
-                            CanUserReorder="False"
-                            CanUserSort="False"
-                            CanUserResize="False" />
-
-                    </DataGrid.Columns>
-
-                </DataGrid>
+                    Margin="12px" />
 
             </TabItem>
 
@@ -1545,7 +1441,7 @@
                         
                         <Hyperlink 
                             RequestNavigate="Hyperlink_RequestNavigate" 
-                            NavigateUri="http://github.com/DelilahEve/" >
+                            NavigateUri="http://github.com/DelilahEve/ArkConfigurationTool" >
                             
                             http://github.com/DelilahEve/ArkConfigurationTool/
                             

@@ -80,14 +80,6 @@ namespace ArkConfigurationTool
         };
 
         /// <summary>
-        ///     Constructs the GameUserIni object for use with GameUserSettings.ini
-        /// </summary>
-        public GameUserIni()
-        {
-
-        }
-
-        /// <summary>
         ///     Reads the GameUserSettings.ini into the program
         /// </summary>
         /// 
@@ -121,6 +113,8 @@ namespace ArkConfigurationTool
                         lines.Add(line);
                     }
                 }
+
+                reader.Close();
             }
 
             return lines;
@@ -226,6 +220,8 @@ namespace ArkConfigurationTool
                     }
                 }
 
+                reader.Close();
+
                 // Build lines for file
                 lines.Add(Reference.gameUserStart);
                 lines.AddRange(options);
@@ -243,6 +239,8 @@ namespace ArkConfigurationTool
                 {
                     writer.WriteLine(l);
                 }
+
+                writer.Close();
             }
         }
 

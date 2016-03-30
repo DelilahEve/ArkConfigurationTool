@@ -8,32 +8,39 @@ namespace ArkConfigurationTool
 {
     class Reference
     {
+        // Misc Values
+        public static int xpStep = 40000;
 
+        // Directories
         public static String serversDirectory = "ArkConfigurationTool\\Servers\\";
         public static String profilesDirectory = "ArkConfigurationTool\\Profiles\\";
         public static String logsDirectory = "ArkConfigurationTool\\Logs\\";
         public static String steamCmdDirectory = "ArkConfigurationTool\\steamCMD\\";
 
+        // Paths
         public static String serverExePath = "\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe";
         public static String gameUserIniPath = "\\ShooterGame\\Saved\\Config\\WindowsServer\\GameUserSettings.ini";
         public static String gameIniPath = "\\ShooterGame\\Saved\\Config\\WindowsServer\\Game.ini";
 
+        // URLs
         public static String steamCmdUrl = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip";
 
+        // Position Markers
         public static String gameStart = "[/script/shootergame.shootergamemode]";
         public static String gameUserStart = "[ServerSettings]";
         public static String gameUserEnd = "[/Script/ShooterGame.ShooterGameUserSettings]";
 
-        // 0 = .exe
+        // 0 = .exe location
         // 1 = Map
         // 2 = GameModIds/etc...
-        public static String cmdStartServer = "start " + serversDirectory + "{0}" + serverExePath + " \"{1}?listen{2}\"";
+        public static String cmdStartServer = "start {0} \"{1}?listen{2}\"";
 
-        // 0 = Server Name
-        public static String cmdUpdateServer = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +force_install_dir " + serversDirectory + "{0} +app_update 346110 validate +quit";
+        // 0 = Install dir
+        public static String cmdUpdateServer = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +force_install_dir {0} +app_update 346110 validate +quit";
 
-        // 0 = ModId
-        public static String cmdUpdateMod = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +workshop_download_item 346110 {0} +quit";
+        // 0 = Install dir
+        // 1 = ModId
+        public static String cmdUpdateMod = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +force_install_dir {0} +workshop_download_item 346110 {1} +quit";
 
         public static int[] playerLevelXP = {
             0,
@@ -195,6 +202,115 @@ namespace ArkConfigurationTool
             225000,
             275000
         };
+
+        /// <summary>
+        ///     Generates a level ramp based on the given level cap
+        /// </summary>
+        /// 
+        /// <param name="cap">The level cap to remain within</param>
+        /// 
+        /// <returns>A list of xp values representing the xp ramp</returns>
+        public static List<int> generateLevelRamp(int cap)
+        {
+            List<int> ramp = new List<int>();
+            
+            int xp = 0;
+            for (int i = 0; i <= cap; i++)
+            {
+                // Calculate XP
+                if (i < Reference.playerLevelXP.Length)
+                {
+                    xp += Reference.playerLevelXP[i];
+                }
+                else
+                {
+                    xp += xpStep;
+                }
+
+                ramp.Add(xp);
+            }
+
+            return ramp;
+        }
+
+        /// <summary>
+        ///     Generates an engram point ramp based on a given
+        ///     level cap
+        /// </summary>
+        /// 
+        /// <param name="cap">The level cap to stay within</param>
+        /// <param name="epStep">The number of engrams to add at each level step</param>
+        /// <param name="levelStep">The level step at which additional EP is added to the given amount</param>
+        /// 
+        /// <returns>a list of engram points for the given level cap</returns>
+        public static List<int> generateEpRamp(int cap, int epStep, int levelStep)
+        {
+            List<int> ramp = new List<int>();
+            
+            int countedLevels = 0;
+            for (int i = 0; i <= cap; i++)
+            {
+                // Calculate EP
+                int ep = 0;
+
+                if (i < 10)
+                {
+                    ep = 8;
+                }
+                else if (i < 20)
+                {
+                    ep = 12;
+                }
+                else if (i < 30)
+                {
+                    ep = 16;
+                }
+                else if (i < 40)
+                {
+                    ep = 20;
+                }
+                else if (i < 50)
+                {
+                    ep = 24;
+                }
+                else if (i < 60)
+                {
+                    ep = 28;
+                }
+                else if (i < 73)
+                {
+                    ep = 40;
+                }
+                else if (i < 87)
+                {
+                    ep = 50;
+                }
+                else if (i < 95)
+                {
+                    ep = 60;
+                }
+                else
+                {
+                    // calculate based on input
+                    if (i == 95)
+                    {
+                        ep += epStep;
+                    }
+
+                    if (countedLevels == levelStep)
+                    {
+                        countedLevels = 0;
+                        ep += epStep;
+                    }
+
+                    countedLevels++;
+                }
+
+                ramp.Add(ep);
+            }
+
+            return ramp;
+        }
         
     }
 }
