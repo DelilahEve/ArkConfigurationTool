@@ -15,13 +15,22 @@ namespace ArkConfigurationTool
         public static String steamCmdDirectory = "ArkConfigurationTool\\steamCMD\\";
 
         public static String serverExePath = "\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe";
+        public static String gameUserIniPath = "\\ShooterGame\\Saved\\Config\\WindowsServer\\GameUserSettings.ini";
+        public static String gameIniPath = "\\ShooterGame\\Saved\\Config\\WindowsServer\\Game.ini";
+
+        public static String steamCmdUrl = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip";
+
+        public static String gameStart = "[/script/shootergame.shootergamemode]";
+        public static String gameUserStart = "[ServerSettings]";
+        public static String gameUserEnd = "[/Script/ShooterGame.ShooterGameUserSettings]";
 
         // 0 = .exe
         // 1 = Map
         // 2 = GameModIds/etc...
         public static String cmdStartServer = "start " + serversDirectory + "{0}" + serverExePath + " \"{1}?listen{2}\"";
 
-        public static String cmdUpdateServer = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +app_update 346110 validate +quit";
+        // 0 = Server Name
+        public static String cmdUpdateServer = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +force_install_dir " + serversDirectory + "{0} +app_update 346110 validate +quit";
 
         // 0 = ModId
         public static String cmdUpdateMod = "start " + steamCmdDirectory + "steamcmd.exe +login anonymous +workshop_download_item 346110 {0} +quit";

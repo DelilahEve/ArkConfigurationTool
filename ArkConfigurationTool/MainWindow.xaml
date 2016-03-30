@@ -344,7 +344,7 @@
                                 x:Name="consoleOutput"
                                 Margin="8px 16px"
                                 Grid.ColumnSpan="3"
-                                IsEnabled="False" />
+                                IsReadOnly="True"/>
 
                             <Button
                                 x:Name="startButton"

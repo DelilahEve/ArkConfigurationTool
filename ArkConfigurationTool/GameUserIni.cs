@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,9 +90,40 @@ namespace ArkConfigurationTool
         /// <summary>
         ///     Reads the GameUserSettings.ini into the program
         /// </summary>
-        public void read()
+        /// 
+        /// <returns>a list of settings from the file</returns>
+        public List<String> read(String serverName)
         {
+            String fileName = Reference.serversDirectory + serverName + Reference.gameUserIniPath;
+            List<String> lines = new List<String>();
 
+            if (File.Exists(fileName))
+            {
+                // read in un-needed file parts
+                StreamReader reader = new StreamReader(fileName);
+
+                Boolean passedSection = false;
+                String line = "";
+                while ((line = reader.ReadLine()) != null && !passedSection)
+                {
+                    if(line == Reference.gameUserStart)
+                    {
+                        continue;
+                    }
+
+                    if (line == Reference.gameUserEnd && !passedSection)
+                    {
+                        passedSection = true;
+                    }
+
+                    if (!passedSection)
+                    {
+                        lines.Add(line);
+                    }
+                }
+            }
+
+            return lines;
         }
 
         /// <summary>
@@ -161,6 +193,57 @@ namespace ArkConfigurationTool
             }
 
             return settings;
+        }
+
+        /// <summary>
+        ///  Writes the file contents to disk
+        /// </summary>
+        public static void saveFile(String serverName, List<String> options)
+        {
+            String fileName = Reference.serversDirectory + serverName + Reference.gameUserIniPath;
+
+            if (File.Exists(fileName))
+            {
+                // read in all of file
+                List<String> lines = new List<String>();
+                List<String> restOfFile = new List<String>();
+
+                // read in un-needed file parts
+                StreamReader reader = new StreamReader(fileName);
+
+                Boolean passedSection = false;
+                String line = "";
+                while((line = reader.ReadLine()) != null)
+                {
+                    if(line == Reference.gameUserEnd && !passedSection)
+                    {
+                        passedSection = true;
+                    }
+
+                    if(passedSection)
+                    {
+                        restOfFile.Add(line);
+                    }
+                }
+
+                // Build lines for file
+                lines.Add(Reference.gameUserStart);
+                lines.AddRange(options);
+                lines.AddRange(restOfFile);
+
+                // Prep output
+                StreamWriter writer = new StreamWriter(fileName);
+
+                // Clear file
+                writer.Write("");
+
+
+                // Output file
+                foreach (String l in lines)
+                {
+                    writer.WriteLine(l);
+                }
+            }
         }
 
     }

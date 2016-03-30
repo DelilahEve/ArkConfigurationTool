@@ -14,6 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Diagnostics;
+using System.Net;
+using System.IO.Compression;
+using System.ComponentModel;
 
 namespace ArkConfigurationTool
 {
@@ -40,6 +43,8 @@ namespace ArkConfigurationTool
             serverNames = new List<string>();
             profiles = new List<string>();
 
+            performSetup();
+
             load();
         }
 
@@ -48,7 +53,6 @@ namespace ArkConfigurationTool
         /// </summary>
         public void performSetup()
         {
-
             ConfigData settings = new ConfigData("settings", "ArkConfigurationTool\\");
 
             List<String> options = new List<String>();
@@ -79,44 +83,44 @@ namespace ArkConfigurationTool
                     Create config file
                 */
 
-                // Create server list string
-                String serverList = "";
-
-                for(int i = 0; i < serverNames.Count; i++)
+                // Create Directories
+                String[] dirs =
                 {
-                    serverList += serverNames[i];
+                    Reference.serversDirectory,
+                    Reference.profilesDirectory,
+                    Reference.steamCmdDirectory,
+                    Reference.logsDirectory
+                };
 
-                    if(i != serverNames.Count-1)
+                foreach(String directory in dirs)
+                {
+                    if (!Directory.Exists(directory))
                     {
-                        serverList += ",";
+                        Directory.CreateDirectory(directory);
                     }
                 }
 
-                values[2] = serverList;
-
-                // create profile list string
-                String profileList = "";
-
-                for(int i = 0; i < profiles.Count; i++)
+                // Install SteamCMD
+                if(!File.Exists(Reference.steamCmdDirectory + "steamcmd.exe"))
                 {
-                    profileList += profiles[i];
+                    // Download
+                    List<String> lines = new List<String>();
 
-                    if(i != profiles.Count-1)
+                    lines.Add("");
+                    lines.Add("=====================================");
+                    lines.Add("        Downloading SteamCMD         ");
+                    lines.Add("=====================================");
+                    lines.Add("");
+
+                    foreach (String line in lines)
                     {
-                        profileList += ",";
+                        handleOutput(line);
                     }
+
+                    String fileUrl = Reference.steamCmdUrl;
+                    String destination = Reference.steamCmdDirectory + "steamCMD.zip";
+                    download(fileUrl, destination);
                 }
-
-                values[3] = profileList;
-
-                // create options list
-                for(int i = 0; i < keys.Length; i++)
-                {
-                    options.Add(keys[i] + "=" + values[i]);
-                }
-
-                // Write to file
-                settings.write(options);
             }
             else
             {
@@ -148,12 +152,86 @@ namespace ArkConfigurationTool
                 }
             }
 
-            isFirstRun = values[0] == "1" ? true : false;
-            isDebugMode = values[1] == "1" ? true : false;
+            // set variables
+            isFirstRun = values[0] == "1";
+            isDebugMode = values[1] == "1";
+            serverNames.AddRange(values[2].Split(','));
+            profiles.AddRange(values[3].Split(','));
 
-            // set server and profile list
+            // save changes
+            saveConfig(keys, values);
 
         }
+
+        /// <summary>
+        ///     Downloads a file
+        /// </summary>
+        public void download(String fileUrl, String destination)
+        {
+            WebClient webClient = new WebClient();
+            webClient.DownloadProgressChanged += downloadProgressChanged;
+            webClient.DownloadFileAsync(new Uri(fileUrl), destination);
+
+            webClient.DownloadFileCompleted += downloadComplete;
+        }
+
+        /// <summary>
+        ///     Updates the log on download progress
+        /// </summary>
+        /// 
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">Event arguments</param>
+        private void downloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            String line = (String.Format("{0}    downloaded {1} of {2} bytes. {3} % complete...",
+                    (string)e.UserState,
+                    e.BytesReceived,
+                    e.TotalBytesToReceive,
+                    e.ProgressPercentage));
+
+            handleOutput(line);
+        }
+
+        /// <summary>
+        ///     Triggered when download completes
+        /// </summary>
+        /// 
+        /// <param name="sender">The object sending the event</param>
+        /// <param name="e">The arguments for the event</param>
+        private void downloadComplete(object sender, AsyncCompletedEventArgs e)
+        {
+            // unzip
+            List<String> lines = new List<String>();
+
+            lines.Add("");
+            lines.Add("=====================================");
+            lines.Add("         Unzipping SteamCMD          ");
+            lines.Add("=====================================");
+            lines.Add("");
+            
+            foreach (String line in lines)
+            {
+                handleOutput(line);
+            }
+
+            ZipFile.ExtractToDirectory(Reference.steamCmdDirectory + "steamCMD.zip", Reference.steamCmdDirectory);
+
+            // remove zip file
+            lines = new List<String>();
+
+            lines.Add("");
+            lines.Add("=====================================");
+            lines.Add("         SteamCMD Installed          ");
+            lines.Add("=====================================");
+            lines.Add("");
+
+            foreach (String line in lines)
+            {
+                handleOutput(line);
+            }
+
+            File.Delete(Reference.steamCmdDirectory + "steamCMD.zip");
+;        }
 
         /// <summary>
         ///     Loads the current servers, profiles, etc...
@@ -167,15 +245,23 @@ namespace ArkConfigurationTool
             }
 
             // load servers
-            serverNames.AddRange(Directory.GetDirectories(Reference.serversDirectory));
-            for (int i = 0; i < serverNames.Count; i++)
+            if(serverNames.Count > 0)
             {
-                String server = serverNames[i].Substring(29);
+                serverNames.AddRange(Directory.GetDirectories(Reference.serversDirectory));
+                for (int i = 0; i < serverNames.Count; i++)
+                {
+                    if (serverNames[i].Equals(""))
+                    {
+                        continue;
+                    }
 
-                MenuItem item = new MenuItem();
-                item.Header = server;
-                item.Click += new RoutedEventHandler(loadServer);
-                openServer.Items.Add(item);
+                    String server = serverNames[i].Substring(29);
+
+                    MenuItem item = new MenuItem();
+                    item.Header = server;
+                    item.Click += new RoutedEventHandler(loadServer);
+                    openServer.Items.Add(item);
+                }
             }
 
             // Check Folder exists
@@ -185,16 +271,77 @@ namespace ArkConfigurationTool
             }
 
             // load profiles
-            profiles.AddRange(Directory.GetDirectories(Reference.profilesDirectory));
+            if(profiles.Count > 0)
+            {
+                profiles.AddRange(Directory.GetDirectories(Reference.profilesDirectory));
+                for (int i = 0; i < profiles.Count; i++)
+                {
+                    if (profiles[i].Equals(""))
+                    {
+                        continue;
+                    }
+
+                    String profile = profiles[i].Substring(30);
+
+                    MenuItem item = new MenuItem();
+                    item.Header = profile;
+                    item.Click += new RoutedEventHandler(loadServerProfile);
+                    loadProfile.Items.Add(item);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Saves the settings file
+        /// </summary>
+        /// 
+        /// <param name="keys">The array of keys to use for values</param>
+        /// <param name="values">the values to write to file</param>
+        private void saveConfig(String[] keys, String[] values)
+        {
+
+            ConfigData settings = new ConfigData("settings", "ArkConfigurationTool\\");
+
+            List<String> options = new List<String>();
+
+            // Create server list string
+            String serverList = "";
+
+            for (int i = 0; i < serverNames.Count; i++)
+            {
+                serverList += serverNames[i];
+
+                if (i != serverNames.Count - 1)
+                {
+                    serverList += ",";
+                }
+            }
+
+            values[2] = serverList;
+
+            // create profile list string
+            String profileList = "";
+
             for (int i = 0; i < profiles.Count; i++)
             {
-                String profile = profiles[i].Substring(30);
+                profileList += profiles[i];
 
-                MenuItem item = new MenuItem();
-                item.Header = profile;
-                item.Click += new RoutedEventHandler(loadServerProfile);
-                loadProfile.Items.Add(item);
+                if (i != profiles.Count - 1)
+                {
+                    profileList += ",";
+                }
             }
+
+            values[3] = profileList;
+
+            // create options list
+            for (int i = 0; i < keys.Length; i++)
+            {
+                options.Add(keys[i] + "=" + values[i]);
+            }
+
+            // Write to file
+            settings.write(options);
         }
 
         /// <summary>
@@ -242,7 +389,7 @@ namespace ArkConfigurationTool
         /// <param name="e">Arguments for the event</param>
         private void generateClick(object sender, RoutedEventArgs e)
         {
-            // Output files here
+            // Save server here
         }
 
         /// <summary>
@@ -294,7 +441,8 @@ namespace ArkConfigurationTool
         /// <param name="text">The text to output</param>
         private void handleOutput(String text)
         {
-            consoleOutput.Text += text + "\n";
+            consoleOutput.AppendText(text + "\n");
+            consoleOutput.ScrollToEnd();
         }
 
         /// <summary>
@@ -609,7 +757,8 @@ namespace ArkConfigurationTool
                 handleOutput(line);
             }
 
-            executeCommand(Reference.cmdUpdateServer, false);
+            String update = String.Format(Reference.cmdUpdateServer, serverName.Text);
+            executeCommand(update, false);
         }
 
         /// <summary>
