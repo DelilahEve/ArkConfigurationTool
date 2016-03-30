@@ -66,66 +66,6 @@ namespace ArkConfigurationTool
         }
 
         /// <summary>
-        ///     Gets the dino tag
-        /// </summary>
-        /// 
-        /// <returns>Dino's tag</returns>
-        public String getTag()
-        {
-            return tag;
-        }
-
-        /// <summary>
-        ///  Gets whether to allow this dino to spawn
-        /// </summary>
-        /// 
-        /// <returns>true if spawn allowed</returns>
-        public Boolean getAllowSpawn()
-        {
-            return allowSpawn;
-        }
-
-        /// <summary>
-        ///     Gets whether to allow taming this dino
-        /// </summary>
-        /// 
-        /// <returns>true if tame allowed</returns>
-        public Boolean getAllowTame()
-        {
-            return allowTame;
-        }
-
-        /// <summary>
-        ///     Gets the spawn rate for the dino
-        /// </summary>
-        /// 
-        /// <returns>the multiplier for the dino's spawn rate</returns>
-        public float getSpawnRate()
-        {
-            return spawnRate;
-        }
-
-        /// <summary>
-        ///     Gets the spawn limit percentage
-        /// </summary>
-        /// 
-        /// <returns>the percentage multiplier of the spawn limit</returns>
-        public float getSpawnLimit()
-        {
-            return spawnLimit;
-        }
-
-        /// <summary>
-        ///     Gets the dino to override this one with
-        /// </summary>
-        /// 
-        /// <returns>The tag of the dino to override this one's AI</returns>
-        public String getOVerrideAiTag()
-        {
-            return overrideAiTag;
-        }
-
-        /// <summary>
         ///     Determines if a dino is set to default settings
         ///     (so we can ignore it if it is when outputting)
         /// </summary>
@@ -143,6 +83,92 @@ namespace ArkConfigurationTool
             result = spawnLimit == 1.0f ? result : true;
 
             return result;
+        }
+
+        public static String getDinoClassName(String tag)
+        {
+            String name = "";
+
+            switch(tag.ToLower())
+            {
+                case "anky":
+                    name = "Ankylo_Character_BP_C";
+                    break;
+                case "argent":
+                    name = "Argent_Character_BP_C";
+                    break;
+                case "bat":
+                    name = "Bat_Character_BP_C";
+                    break;
+                case "bronto":
+                    name = "Sauropod_Character_BP_C";
+                    break;
+                case "carno":
+                    name = "Carno_Character_BP_C";
+                    break;
+                case "coel":
+                    name = "Coel_Character_BP_C";
+                    break;
+                case "dilo":
+                    name = "Dilo_Character_BP_C";
+                    break;
+                case "dodo":
+                    name = "Dimetro_Character_BP_C";
+                    break;
+                case "mammoth":
+                    name = "Mammoth_Character_BP_C";
+                    break;
+                case "mega":
+                    name = "Megalodon_Character_BP_C";
+                    break;
+                case "para":
+                    name = "Para_Character_BP_C";
+                    break;
+                case "phiomia":
+                    name = "Phiomia_Character_BP_C";
+                    break;
+                case "piranha":
+                    name = "Piranha_Character_BP_C";
+                    break;
+                case "ptera":
+                    name = "Ptero_Character_BP_C";
+                    break;
+                case "raptor":
+                    name = "Raptor_Character_BP_C";
+                    break;
+                case "rex":
+                    name = "Rex_Character_BP_C";
+                    break;
+                case "sabertooth":
+                    name = "Saber_Character_BP_C";
+                    break;
+                case "sarco":
+                    name = "Sarco_Character_BP_C";
+                    break;
+                case "scorpion":
+                    name = "Scorpion_Character_BP_C";
+                    break;
+                case "stego":
+                    name = "Stego_Character_BP_C";
+                    break;
+                case "spino":
+                    name = "";
+                    break;
+                case "spider":
+                    name = "SpiderS_Character_BP_C";
+                    break;
+                case "titanboa":
+                    name = "BoaFrill_Character_BP_C";
+                    break;
+                case "trike":
+                    name = "Trike_Character_BP_C";
+                    break;
+                case "turtle":
+                    name = "Turtle_Character_BP_C";
+                    break;
+            }
+
+            return name;
         }
     }
 }

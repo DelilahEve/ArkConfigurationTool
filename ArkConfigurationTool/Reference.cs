@@ -212,15 +212,40 @@ namespace ArkConfigurationTool
         /// <returns>A list of xp values representing the xp ramp</returns>
         public static List<int> generateLevelRamp(int cap)
         {
+            /* ---------------------- Edit to allow overriding vanilla levels -------------------------- */
+            /* ---------------------- Edit to allow overriding boosted levels -------------------------- */
             List<int> ramp = new List<int>();
             
             int xp = 0;
             for (int i = 0; i <= cap; i++)
             {
                 // Calculate XP
-                if (i < Reference.playerLevelXP.Length)
+                if (i < playerLevelXP.Length)
                 {
-                    xp += Reference.playerLevelXP[i];
+                    xp += playerLevelXP[i];
+                }
+                else
+                {
+                    xp += xpStep;
+                }
+
+                ramp.Add(xp);
+            }
+
+            return ramp;
+        }
+
+        public static List<int> generateLevelRampDino(int cap)
+        {
+            List<int> ramp = new List<int>();
+
+            int xp = 0;
+            for (int i = 0; i <= cap; i++)
+            {
+                // Calculate XP
+                if (i < dinoLevelXP.Length)
+                {
+                    xp += dinoLevelXP[i];
                 }
                 else
                 {
@@ -243,8 +268,10 @@ namespace ArkConfigurationTool
         /// <param name="levelStep">The level step at which additional EP is added to the given amount</param>
         /// 
         /// <returns>a list of engram points for the given level cap</returns>
-        public static List<int> generateEpRamp(int cap, int epStep, int levelStep)
+        public static List<int> generateEpRamp(int cap, int epStep, int levelStep, Boolean doOverride)
         {
+            /* ---------------------- Edit to allow overriding vanilla levels -------------------------- */
+            /* ---------------------- Edit to allow overriding boosted levels -------------------------- */
             List<int> ramp = new List<int>();
             
             int countedLevels = 0;

@@ -373,6 +373,14 @@ namespace ArkConfigurationTool
         public int epCost { get; set; }
         public int levelRequired { get; set; }
 
+        /// <summary>
+        ///     Initializes the engram class
+        /// </summary>
+        /// 
+        /// <param name="engramTag">The tag for this engram</param>
+        /// <param name="hideEngram">Whether this engram should be hidden</param>
+        /// <param name="epCost">The EP cost for this engram</param>
+        /// <param name="levelRequired">The level required for this engram</param>
         public Engram(String engramTag, Boolean hideEngram, int epCost, int levelRequired)
         {
             this.engramTag = engramTag;
@@ -382,43 +390,50 @@ namespace ArkConfigurationTool
         }
 
         /// <summary>
-        ///     Gets the engram tag for this engram
+        ///     Retrieves the original engram for a given tag
         /// </summary>
         /// 
-        /// <returns>This engram's tag</returns>
-        public String getEngramTag()
+        /// <param name="tag">The tag of the engram to get</param>
+        /// 
+        /// <returns>The original copy of the engram with the given tag</returns>
+        public static Engram getByTag(String tag)
         {
-            return engramTag;
+            Engram e = null;
+
+            Boolean found = false;
+            int i = 0;
+            while (!found && i < engrams.Count())
+            {
+                if (tag.Equals(engrams[i].engramTag))
+                {
+                    e = engrams[i];
+                    found = true;
+                }
+            }
+
+            return e;
         }
 
         /// <summary>
-        ///     Gets whether to hide the engram
+        ///     Checks if the given engram is identical to the original
         /// </summary>
         /// 
-        /// <returns>Whether this engram should be hidden</returns>
-        public Boolean getHideEngram()
+        /// <param name="engram">The engram to compare</param>
+        /// 
+        /// <returns>True if same as the original</returns>
+        public static Boolean isDefault(Engram engram)
         {
-            return hideEngram;
-        }
+            Boolean defaultEngram = true;
+            Engram original = getByTag(engram.engramTag);
 
-        /// <summary>
-        ///     Gets the ep cost of this engram
-        /// </summary>
-        /// 
-        /// <returns>The ep cost of the engram</returns>
-        public int getEpCost()
-        {
-            return epCost;
-        }
+            if(original != null)
+            {
+                defaultEngram = engram.hideEngram == original.hideEngram ? defaultEngram : false;
+                defaultEngram = engram.epCost == original.epCost ? defaultEngram : false;
+                defaultEngram = engram.levelRequired == original.levelRequired ? defaultEngram : false;
+            }
 
-        /// <summary>
-        ///     Gets the level required to unlock this engram
-        /// </summary>
-        /// 
-        /// <returns>The level required for unlocking</returns>
-        public int getLevelRequired()
-        {
-            return levelRequired;
+            return defaultEngram;
         }
     }
 }

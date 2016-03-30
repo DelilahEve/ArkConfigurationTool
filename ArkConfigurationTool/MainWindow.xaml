@@ -1356,6 +1356,7 @@
                                 Text="10"/>
 
                             <CheckBox
+                                x:Name="overrideVanilla"
                                 Grid.Column="0"
                                 Grid.Row="2"
                                 VerticalAlignment="Center"

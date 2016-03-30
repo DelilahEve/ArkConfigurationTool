@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace ArkConfigurationTool
 {
@@ -14,6 +16,12 @@ namespace ArkConfigurationTool
         private int xpStep;
         private int engramStep;
         private int levelStep;
+
+        private DataGrid levelTable;
+        private DataGrid dinoTable;
+        private DataGrid engramTable;
+
+        private Boolean doOverride = false;
 
         private String[] boolKeys =
         {
@@ -63,12 +71,21 @@ namespace ArkConfigurationTool
         /// <param name="xpStep">The step in xp between levels</param>
         /// <param name="engramStep">the step in engrams between level steps</param>
         /// <param name="levelStep">The step in level for engram steps</param>
-        public GameIni(int levelCap, int xpStep, int engramStep, int levelStep)
+        /// <param name="levelTable">The Table containing level settings</param>
+        /// <param name="dinoTable">The table containing dino settings</param>
+        /// <param name="engramTable">The table containing engram settings</param>
+        public GameIni(int levelCap, int xpStep, int engramStep, int levelStep, DataGrid levelTable, DataGrid dinoTable, DataGrid engramTable, Boolean doOverride)
         {
             this.levelCap = levelCap;
             this.xpStep = xpStep;
             this.engramStep = engramStep;
             this.levelStep = levelStep;
+
+            this.levelTable = levelTable;
+            this.dinoTable = dinoTable;
+            this.engramTable = engramTable;
+
+            this.doOverride = doOverride;
         }
 
         /// <summary>
@@ -81,27 +98,17 @@ namespace ArkConfigurationTool
 
             if (File.Exists(fileName))
             {
-                // read in un-needed file parts
                 StreamReader reader = new StreamReader(fileName);
-
-                Boolean passedSection = false;
+                
                 String line = "";
-                while ((line = reader.ReadLine()) != null && !passedSection)
+                while ((line = reader.ReadLine()) != null)
                 {
-                    if (line == Reference.gameUserStart)
+                    if (line == Reference.gameStart)
                     {
                         continue;
                     }
 
-                    if (line == Reference.gameUserEnd && !passedSection)
-                    {
-                        passedSection = true;
-                    }
-
-                    if (!passedSection)
-                    {
-                        lines.Add(line);
-                    }
+                    lines.Add(line);
                 }
 
                 reader.Close();
@@ -142,6 +149,11 @@ namespace ArkConfigurationTool
 
             // Player Level Values
             settings.AddRange(generatePlayerLevelOverride());
+            // Dino Levels (LATER)
+            // Dino Settings
+            settings.AddRange(generateDinoSettings());
+            // Engram Settings
+            settings.AddRange(generateEngramSettings());
 
             return settings;
         }
@@ -156,24 +168,29 @@ namespace ArkConfigurationTool
         {
             List<String> lines = new List<String>();
             String line = "LevelExperienceRampOverrides=(";
+            
+            List<Level> levels = (List<Level>)levelTable.ItemsSource;
 
-            /* ---------------------- Edit to allow overriding vanilla levels -------------------------- */
-            /* ---------------------- Edit to allow overriding boosted levels -------------------------- */
-            int xp = 0;
+            List<int> xpRamp;
+            if (levels.Count == 0)
+            {
+                xpRamp = Reference.generateLevelRamp(levelCap);
+            }    
+            else
+            {
+                xpRamp = new List<int>();
+
+                foreach(Level l in levels)
+                {
+                    xpRamp.Add(l.xpForLevel);
+                }
+            }
+
             for (int i = 0; i < levelCap; i++)
             {
                 line += "ExperiencePointsForLevel[" + i + "]=";
 
-                if (i < Reference.playerLevelXP.Length)
-                {
-                    xp += Reference.playerLevelXP[i];
-                }
-                else
-                {
-                    xp += xpStep;
-                }
-
-                line += xp;
+                line += xpRamp[i];
 
                 if (i != levelCap)
                 {
@@ -185,7 +202,7 @@ namespace ArkConfigurationTool
 
             lines.Add(line);
 
-            lines.Add("overrideMaxExperiencePointsPlayer=" + xp);
+            lines.Add("overrideMaxExperiencePointsPlayer=" + xpRamp[xpRamp.Count-1]);
 
             return lines;
         }
@@ -200,24 +217,14 @@ namespace ArkConfigurationTool
         {
             List<String> lines = new List<String>();
             String line = "LevelExperienceRampOverrides=(";
+            
+            List<int> xpRamp = Reference.generateLevelRampDino(levelCap);
 
-            /* ---------------------- Edit to allow overriding vanilla levels -------------------------- */
-            /* ---------------------- Edit to allow overriding boosted levels -------------------------- */
-            int xp = 0;
             for (int i = 0; i < levelCap; i++)
             {
                 line += "ExperiencePointsForLevel[" + i + "]=";
-
-                if (i < Reference.dinoLevelXP.Length)
-                {
-                    xp += Reference.dinoLevelXP[i];
-                }
-                else
-                {
-                    xp += xpStep;
-                }
-
-                line += xp;
+                
+                line += xpRamp[i];
 
                 if (i != levelCap)
                 {
@@ -229,7 +236,7 @@ namespace ArkConfigurationTool
 
             lines.Add(line);
 
-            lines.Add("overrideMaxExperiencePointsDino=" + xp);
+            lines.Add("overrideMaxExperiencePointsDino=" + xpRamp[xpRamp.Count-1]);
 
             return lines;
         }
@@ -243,14 +250,42 @@ namespace ArkConfigurationTool
         {
             List<String> settings = new List<String>();
 
-            // generate settings from dino tab here
+            String dinoOverride = "DinoSpawnWeightMultipliers=(DinoNameTag={0},SpawnWeightMultiplier={1},OverrideSpawnLimitPercentage={2},SpawnLimitPercentage={3})";
+            String preventTame = "preventDinoTameClassNames={0}";
+            String npcReplace = "npcReplacements=(fromClassName=\"{0}\",toClassName=\"{1}\")";
 
-            // dinoTag
-            // allowSpawn
-            // allowTame
-            // spawnRateMultiplier
-            // spawnLimit
-            // overrideAi
+            List<Dino> dinos = (List<Dino>)dinoTable.ItemsSource;
+
+            foreach(Dino d in dinos)
+            {
+                if(!d.isDefault())
+                {
+                    if(!d.allowSpawn)
+                    {
+                        settings.Add(String.Format(dinoOverride, d.tag, 0, "false", 0));
+                    }
+                    else
+                    {
+                        String limitPercent = "false";
+
+                        if(d.spawnLimit != 1.0)
+                        {
+                            limitPercent = "true";
+                        }
+                        settings.Add(String.Format(dinoOverride, d.tag, d.spawnRate, limitPercent, d.spawnLimit));
+                    }
+
+                    if(!d.allowTame)
+                    {
+                        settings.Add(String.Format(preventTame, "false"));
+                    }
+
+                    if(d.tag != d.overrideAiTag)
+                    {
+                        settings.Add(String.Format(npcReplace, Dino.getDinoClassName(d.tag), Dino.getDinoClassName(d.overrideAiTag)));
+                    }
+                }
+            }
 
             return settings;
         }
@@ -263,6 +298,23 @@ namespace ArkConfigurationTool
             // hideEngram
             // epCost
             // levelReq
+
+            /* 
+                OverrideEngramEntries=(
+                    EngramIndex =< index >
+                    [, EngramHidden =< hidden >]
+                    [, EngramPointsCost =< cost >]
+                    [, EngramLevelRequirement =< level >]
+                    [, RemoveEngramPreReq =< remove_prereq >]
+                )    
+            */
+
+            List<Engram> engrams = (List<Engram>)engramTable.ItemsSource;
+
+            foreach(Engram e in engrams)
+            {
+                // add to settings
+            }
 
             return settings;
         }
@@ -277,66 +329,27 @@ namespace ArkConfigurationTool
         {
             List<String> lines = new List<string>();
 
-            int countedLevels = 0;
+            List<Level> levels = (List<Level>)levelTable.ItemsSource;
 
-            for (int i = 0; i < levelCap; i++)
+            List<int> epRamp;
+
+            if (levels.Count == 0)
             {
-                int ep = 0;
+                epRamp = Reference.generateEpRamp(levelCap, engramStep, levelStep, doOverride);
+            }
+            else
+            {
+                epRamp = new List<int>();
 
-                if (i < 10)
+                foreach(Level l in levels)
                 {
-                    ep = 8;
+                    epRamp.Add(l.epForLevel);
                 }
-                else if (i < 20)
-                {
-                    ep = 12;
-                }
-                else if (i < 30)
-                {
-                    ep = 16;
-                }
-                else if (i < 40)
-                {
-                    ep = 20;
-                }
-                else if (i < 50)
-                {
-                    ep = 24;
-                }
-                else if (i < 60)
-                {
-                    ep = 28;
-                }
-                else if (i < 73)
-                {
-                    ep = 40;
-                }
-                else if (i < 87)
-                {
-                    ep = 50;
-                }
-                else if (i < 95)
-                {
-                    ep = 60;
-                }
-                else
-                {
-                    // calculate based on input
-                    if (i == 95)
-                    {
-                        ep += engramStep;
-                    }
+            }
 
-                    if (countedLevels == levelStep)
-                    {
-                        countedLevels = 0;
-                        ep += engramStep;
-                    }
-
-                    countedLevels++;
-                }
-
-                lines.Add("OverridePlayerLevelEngramPoints=" + ep);
+            for(int i = 0; i < epRamp.Count; i++)
+            {
+                lines.Add("OverridePlayerLevelEngramPoints=" + epRamp[i]);
             }
 
             return lines;

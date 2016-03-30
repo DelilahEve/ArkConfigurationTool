@@ -32,6 +32,8 @@ namespace ArkConfigurationTool
 
         private Process serverProcess;
 
+        private int currentServer = 0;
+
         /// <summary>
         ///     Initializes the program
         /// </summary>
@@ -114,6 +116,8 @@ namespace ArkConfigurationTool
                     String destination = Reference.steamCmdDirectory + "steamCMD.zip";
                     download(fileUrl, destination);
                 }
+
+                // Set up Generic Server?
             }
             else
             {
@@ -348,8 +352,18 @@ namespace ArkConfigurationTool
         /// <param name="e">Arguments for the event</param>
         private void loadServer(Object sender, RoutedEventArgs e)
         {
-            // get server name
-            // load settings etc...
+            String serverName = (sender as MenuItem).Header.ToString();
+            
+            if (serverProcess == null)
+            {
+                // load server.act
+                // read Game.ini
+                // read GameUserSettings.ini
+            }
+            else
+            {
+                MessageBox.Show("Cannot switch servers while one is running :(");
+            }
         }
 
 
@@ -545,42 +559,6 @@ namespace ArkConfigurationTool
         {
             List<String> settings = new List<string>();
 
-            /*
-            
-                *OverrideEngramEntries=(
-                EngramIndex=<index>
-                [,EngramHidden=<hidden>]
-                [,EngramPointsCost=<cost>]
-                [,EngramLevelRequirement=<level>]
-                [,RemoveEngramPreReq=<remove_prereq>]
-                )    
-
-                *DinoSpawnWeightMultipliers=(
-                DinoNameTag=<tag>
-                [,SpawnWeightMultiplier=<factor>]
-                [,OverrideSpawnLimitPercentage=<override>]
-                [,SpawnLimitPercentage=<limit>]
-                )
-
-                ?harvestResourceItemAmountClassMultipliers=(
-                className="<classname>",
-                multiplier=<valule>
-                )
-                
-                *preventDinoTameClassNames
-
-                *npcReplacements=(
-                fromClassName="<className>"
-                toClassName="<toClassName>"
-                )
-
-                ?
-                perLevelStatsMultiplier_Player<type>[<attribute>]
-                perLevelStatsMultiplier_DinoTamed<type>[<attribute>]
-                perLevelStatsMultiplier_DinoWild<type>[<attribute>]
-                ?
-            */
-
             float[] floatValues =
             {
                 float.Parse(resourceReplenishPlayer.Text),
@@ -610,7 +588,17 @@ namespace ArkConfigurationTool
                 (Boolean)autoPveUsesSystemTime.IsChecked
             };
 
-            GameIni game = new GameIni(int.Parse(levelCap.Text), Reference.xpStep, int.Parse(engramStep.Text), int.Parse(lvlStep.Text));
+            GameIni game = new GameIni(
+                int.Parse(levelCap.Text), 
+                Reference.xpStep, 
+                int.Parse(engramStep.Text), 
+                int.Parse(lvlStep.Text), 
+                levelGrid, 
+                dinoGrid, 
+                engramGrid, 
+                (Boolean)overrideVanilla.IsChecked
+            );
+
             settings = game.write(boolValues, floatValues);
 
             return settings;
@@ -871,7 +859,7 @@ namespace ArkConfigurationTool
             int levelStep = int.Parse(lvlStep.Text);
 
             List<int> xpRamp = Reference.generateLevelRamp(cap);
-            List<int> epRamp = Reference.generateEpRamp(cap, epStep, levelStep);
+            List<int> epRamp = Reference.generateEpRamp(cap, epStep, levelStep, (Boolean)overrideVanilla.IsChecked);
 
             for (int i = 2; i <= cap; i++)
             {
