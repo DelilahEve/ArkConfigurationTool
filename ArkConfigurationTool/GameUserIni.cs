@@ -79,6 +79,18 @@ namespace ArkConfigurationTool
             "maxPlayers"
         };
 
+        private String motd;
+
+        /// <summary>
+        ///     Sets up the GameUserIni 
+        /// </summary>
+        /// 
+        /// <param name="motd">the message of the day</param>
+        public GameUserIni(String motd)
+        {
+            this.motd = motd;
+        }
+
         /// <summary>
         ///     Reads the GameUserSettings.ini into the program
         /// </summary>
@@ -185,6 +197,15 @@ namespace ArkConfigurationTool
             {
                 settings.Add(intKeys[i] + "=" + intValues[i]);
             }
+
+            // Set MOTD
+
+            return settings;
+        }
+
+        private List<String> generateMOTD()
+        {
+            List<String> settings = new List<String>();
 
             return settings;
         }

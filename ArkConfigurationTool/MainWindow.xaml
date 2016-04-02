@@ -25,28 +25,16 @@
                 <MenuItem 
                     x:Name="newServer"
                     Header="_New Server" />
-                
+
                 <MenuItem 
                     x:Name="openServer"
                     Header="_Open Server..." />
-                
+
                 <Separator />
-                
+
                 <MenuItem 
                     x:Name="close"
                     Header="_Close" />
-
-            </MenuItem>
-
-            <MenuItem Header="_Profiles">
-
-                <MenuItem 
-                    x:Name="loadProfile"
-                    Header="_Load Profile..." />
-                
-                <MenuItem 
-                    x:Name="saveProfile"
-                    Header="_Save Profile" />
 
             </MenuItem>
 

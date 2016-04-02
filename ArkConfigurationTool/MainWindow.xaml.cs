@@ -28,7 +28,6 @@ namespace ArkConfigurationTool
         private Boolean isDebugMode = true;
 
         private List<String> serverNames;
-        private List<String> profiles;
 
         private Process serverProcess;
 
@@ -42,7 +41,6 @@ namespace ArkConfigurationTool
             InitializeComponent();
 
             serverNames = new List<string>();
-            profiles = new List<string>();
 
             performSetup();
 
@@ -64,15 +62,13 @@ namespace ArkConfigurationTool
             {
                 "isFirstRun",
                 "isDebugMode",
-                "serverList",
-                "profileList"
+                "serverList"
             };
 
             String[] values =
             {
                 "0",
                 "0",
-                "",
                 ""
             };
 
@@ -82,7 +78,6 @@ namespace ArkConfigurationTool
                 String[] dirs =
                 {
                     Reference.serversDirectory,
-                    Reference.profilesDirectory,
                     Reference.steamCmdDirectory,
                     Reference.logsDirectory
                 };
@@ -116,8 +111,6 @@ namespace ArkConfigurationTool
                     String destination = Reference.steamCmdDirectory + "steamCMD.zip";
                     download(fileUrl, destination);
                 }
-
-                // Set up Generic Server?
             }
             else
             {
@@ -142,9 +135,6 @@ namespace ArkConfigurationTool
                         case "serverList":
                             values[2] = value;
                             break;
-                        case "profileList":
-                            values[3] = value;
-                            break;
                     }
                 }
             }
@@ -153,7 +143,6 @@ namespace ArkConfigurationTool
             isFirstRun = values[0] == "1";
             isDebugMode = values[1] == "1";
             serverNames.AddRange(values[2].Split(','));
-            profiles.AddRange(values[3].Split(','));
 
             // save changes
             saveConfig(keys, values);
@@ -259,31 +248,6 @@ namespace ArkConfigurationTool
                     openServer.Items.Add(item);
                 }
             }
-
-            // Check Folder exists
-            if (!Directory.Exists(Reference.profilesDirectory))
-            {
-                Directory.CreateDirectory(Reference.profilesDirectory);
-            }
-
-            // load profiles
-            if(profiles.Count > 0)
-            {
-                for (int i = 0; i < profiles.Count; i++)
-                {
-                    if (profiles[i].Equals(""))
-                    {
-                        continue;
-                    }
-
-                    String profile = profiles[i];
-
-                    MenuItem item = new MenuItem();
-                    item.Header = profile;
-                    item.Click += new RoutedEventHandler(loadServerProfile);
-                    loadProfile.Items.Add(item);
-                }
-            }
             
             // Display Tables
             displayLevelTable();
@@ -317,23 +281,6 @@ namespace ArkConfigurationTool
                 }
             }
 
-            values[2] = serverList;
-
-            // create profile list string
-            String profileList = "";
-
-            for (int i = 0; i < profiles.Count; i++)
-            {
-                profileList += profiles[i];
-
-                if (i != profiles.Count - 1)
-                {
-                    profileList += ",";
-                }
-            }
-
-            values[3] = profileList;
-
             // create options list
             for (int i = 0; i < keys.Length; i++)
             {
@@ -366,21 +313,6 @@ namespace ArkConfigurationTool
             }
         }
 
-
-        /// <summary>
-        ///     Loads a profile when selected from the "Open Profile..." menu item
-        /// </summary>
-        /// 
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">Arguments for the event</param>
-        private void loadServerProfile(Object sender, RoutedEventArgs e)
-        {
-            String profileName = (sender as MenuItem).Header.ToString();
-            
-            // load profile using name
-        }
-
-
         /// <summary>
         ///     Navigates to a link when clicked
         /// </summary>
@@ -402,7 +334,21 @@ namespace ArkConfigurationTool
         /// <param name="e">Arguments for the event</param>
         private void generateClick(object sender, RoutedEventArgs e)
         {
-            // Save server here
+            List<String> game;
+            List<String> gameUser;
+
+            game = generateGameIni();
+            gameUser = generateGameUserIni();
+            
+            GameIni.saveFile(serverName.Text, game);
+            GameUserIni.saveFile(serverName.Text, gameUser);
+
+            String[] configKeys =
+            {
+                "serverName",
+                "mods",
+                "map"
+            };
         }
 
         /// <summary>

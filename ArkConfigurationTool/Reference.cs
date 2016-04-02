@@ -29,6 +29,7 @@ namespace ArkConfigurationTool
         public static String gameStart = "[/script/shootergame.shootergamemode]";
         public static String gameUserStart = "[ServerSettings]";
         public static String gameUserEnd = "[/Script/ShooterGame.ShooterGameUserSettings]";
+        public static String motdStart = "[MessageOfTheDay]";
 
         // 0 = .exe location
         // 1 = Map

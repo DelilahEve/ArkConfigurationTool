@@ -290,30 +290,25 @@ namespace ArkConfigurationTool
             return settings;
         }
 
+        /// <summary>
+        ///     Creates a list of settings regarding engrams
+        /// </summary>
+        /// 
+        /// <returns>The list of engram settings</returns>
         public List<String> generateEngramSettings()
         {
+            String overrideEngram = "OverrideEngramEntries=(EngramIndex={0},EngramHidden={1},EngramPointsCost={2},EngramLevelRequirement={3})";
+
             List<String> settings = new List<String>();
-
-            // engramTag
-            // hideEngram
-            // epCost
-            // levelReq
-
-            /* 
-                OverrideEngramEntries=(
-                    EngramIndex =< index >
-                    [, EngramHidden =< hidden >]
-                    [, EngramPointsCost =< cost >]
-                    [, EngramLevelRequirement =< level >]
-                    [, RemoveEngramPreReq =< remove_prereq >]
-                )    
-            */
 
             List<Engram> engrams = (List<Engram>)engramTable.ItemsSource;
 
             foreach(Engram e in engrams)
             {
-                // add to settings
+                if(!Engram.isDefault(e))
+                {
+                    settings.Add(String.Format(overrideEngram, e.getEngramIndex(), e.hideEngram, e.epCost, e.levelRequired));
+                }
             }
 
             return settings;

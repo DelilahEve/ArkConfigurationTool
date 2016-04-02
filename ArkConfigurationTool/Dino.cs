@@ -60,11 +60,6 @@ namespace ArkConfigurationTool
             overrideAiTag = tag;
         }
 
-        public Dino(/* Row data here? */)
-        {
-            // set values from row here
-        }
-
         /// <summary>
         ///     Determines if a dino is set to default settings
         ///     (so we can ignore it if it is when outputting)
@@ -85,6 +80,13 @@ namespace ArkConfigurationTool
             return result;
         }
 
+        /// <summary>
+        ///     Gets a dino's classname as defined by ark
+        /// </summary>
+        /// 
+        /// <param name="tag">the tag for the dino to lookup</param>
+        /// 
+        /// <returns>The classname of the dino</returns>
         public static String getDinoClassName(String tag)
         {
             String name = "";
