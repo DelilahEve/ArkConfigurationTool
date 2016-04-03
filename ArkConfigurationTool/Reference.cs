@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ArkConfigurationTool
@@ -203,6 +204,13 @@ namespace ArkConfigurationTool
             225000,
             275000
         };
+
+        public static Boolean isNumber(String text)
+        {
+            Regex r = new Regex("[0-9]+(.[0-9])*");
+
+            return r.IsMatch(text);
+        }
 
         /// <summary>
         ///     Generates a level ramp based on the given level cap

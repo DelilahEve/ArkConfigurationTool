@@ -487,7 +487,7 @@ namespace ArkConfigurationTool
                             break;
                     }
                 }
-                else if(!item.Text.All(Char.IsDigit))
+                else if(!Reference.isNumber(item.Text))
                 {
                     errors.Add("Feild must be numerical: " + item.Name);
                 }
