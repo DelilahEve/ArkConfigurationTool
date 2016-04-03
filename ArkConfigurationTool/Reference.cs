@@ -213,8 +213,6 @@ namespace ArkConfigurationTool
         /// <returns>A list of xp values representing the xp ramp</returns>
         public static List<int> generateLevelRamp(int cap)
         {
-            /* ---------------------- Edit to allow overriding vanilla levels -------------------------- */
-            /* ---------------------- Edit to allow overriding boosted levels -------------------------- */
             List<int> ramp = new List<int>();
             
             int xp = 0;
@@ -236,6 +234,13 @@ namespace ArkConfigurationTool
             return ramp;
         }
 
+        /// <summary>
+        ///     Generates the level ramp for dinos
+        /// </summary>
+        /// 
+        /// <param name="cap">the max level-ups for dinos</param>
+        /// 
+        /// <returns>the generated level ramp</returns>
         public static List<int> generateLevelRampDino(int cap)
         {
             List<int> ramp = new List<int>();
@@ -276,53 +281,60 @@ namespace ArkConfigurationTool
             List<int> ramp = new List<int>();
             
             int countedLevels = 0;
+            int ep = 0;
             for (int i = 0; i <= cap; i++)
             {
                 // Calculate EP
-                int ep = 0;
 
-                if (i < 10)
+                if(!doOverride && i < 95)
                 {
-                    ep = 8;
-                }
-                else if (i < 20)
-                {
-                    ep = 12;
-                }
-                else if (i < 30)
-                {
-                    ep = 16;
-                }
-                else if (i < 40)
-                {
-                    ep = 20;
-                }
-                else if (i < 50)
-                {
-                    ep = 24;
-                }
-                else if (i < 60)
-                {
-                    ep = 28;
-                }
-                else if (i < 73)
-                {
-                    ep = 40;
-                }
-                else if (i < 87)
-                {
-                    ep = 50;
-                }
-                else if (i < 95)
-                {
-                    ep = 60;
+                    if (i < 10)
+                    {
+                        ep = 8;
+                    }
+                    else if (i < 20)
+                    {
+                        ep = 12;
+                    }
+                    else if (i < 30)
+                    {
+                        ep = 16;
+                    }
+                    else if (i < 40)
+                    {
+                        ep = 20;
+                    }
+                    else if (i < 50)
+                    {
+                        ep = 24;
+                    }
+                    else if (i < 60)
+                    {
+                        ep = 28;
+                    }
+                    else if (i < 73)
+                    {
+                        ep = 40;
+                    }
+                    else if (i < 87)
+                    {
+                        ep = 50;
+                    }
+                    else if (i < 95)
+                    {
+                        ep = 60;
+                    }
                 }
                 else
                 {
                     // calculate based on input
-                    if (i == 95)
+                    if (!doOverride && i == 95)
                     {
                         ep += epStep;
+                    }
+                    else if(i == 0)
+                    {
+                        ep = epStep;
                     }
 
                     if (countedLevels == levelStep)

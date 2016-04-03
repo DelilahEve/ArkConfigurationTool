@@ -31,8 +31,6 @@ namespace ArkConfigurationTool
 
         private Process serverProcess;
 
-        private int currentServer = 0;
-
         /// <summary>
         ///     Initializes the program
         /// </summary>
@@ -78,8 +76,7 @@ namespace ArkConfigurationTool
                 String[] dirs =
                 {
                     Reference.serversDirectory,
-                    Reference.steamCmdDirectory,
-                    Reference.logsDirectory
+                    Reference.steamCmdDirectory
                 };
 
                 foreach(String directory in dirs)
@@ -231,6 +228,7 @@ namespace ArkConfigurationTool
             }
 
             // load servers
+            /*
             if(serverNames.Count > 0)
             {
                 for (int i = 0; i < serverNames.Count; i++)
@@ -248,6 +246,7 @@ namespace ArkConfigurationTool
                     openServer.Items.Add(item);
                 }
             }
+            */
             
             // Display Tables
             displayLevelTable();
@@ -334,21 +333,167 @@ namespace ArkConfigurationTool
         /// <param name="e">Arguments for the event</param>
         private void generateClick(object sender, RoutedEventArgs e)
         {
-            List<String> game;
-            List<String> gameUser;
-
-            game = generateGameIni();
-            gameUser = generateGameUserIni();
-            
-            GameIni.saveFile(serverName.Text, game);
-            GameUserIni.saveFile(serverName.Text, gameUser);
-
-            String[] configKeys =
+            List<String> errors = validate();
+            if(errors.Count > 0)
             {
-                "serverName",
-                "mods",
-                "map"
+                String error = "";
+
+                foreach(String err in errors)
+                {
+                    error += err + "\n";
+                }
+
+                MessageBox.Show(error);
+            }
+            else
+            {
+                // Ensure server is installed
+                String serverExe = Reference.serversDirectory + serverName.Text + Reference.serverExePath;
+                if (!File.Exists(serverExe))
+                {
+                    updateServer();
+                }
+
+                // Save ini files
+                List<String> game;
+                List<String> gameUser;
+
+                game = generateGameIni();
+                gameUser = generateGameUserIni();
+
+                GameIni.saveFile(serverName.Text, game);
+                GameUserIni.saveFile(serverName.Text, gameUser);
+
+                // Save congifuration file
+                String[] configKeys =
+                {
+                    "serverName",
+                    "mods",
+                    "map"
+                };
+
+                String[] values =
+                {
+                    serverName.Text,
+                    modList.Text,
+                    serverMap.Text
+                };
+
+                ConfigData serverConfig = new ConfigData("serverData", Reference.serversDirectory + serverName.Text);
+
+                List<String> settings = new List<String>();
+
+                for (int i = 0; i < configKeys.Length; i++)
+                {
+                    settings.Add(configKeys[i] + "=" + values[i]);
+                }
+
+                serverConfig.write(settings);
+            }
+        }
+
+        private List<String> validate()
+        {
+            List<String> errors = new List<String>();
+            
+            // Check serverName
+            if(serverName.Text.Equals(""))
+            {
+                errors.Add("Server needs a name!");
+            }
+            // Check map
+            if(serverMap.Text.Equals(""))
+            {
+                errors.Add("Server needs a map");
+            }
+
+            // All text boxes numeric && empty -> 1.0
+            TextBox[] numeric =
+            {
+                resourceReplenishPlayer,
+                resourceReplenishStructure,
+                matingInterval,
+                eggHatch,
+                babyMature,
+                babyFood,
+                eggInterval,
+                poopInterval,
+                cropDecay,
+                structureDamageCooldown,
+                dinoHarvestDamage,
+                playerHarvestDamage,
+                dinoTurretDamage,
+                pvpRespawn,
+                pvpRespawnMultiplier,
+                pvpRespawnBase,
+                structureDistance,
+                daySpeed,
+                nightSpeed,
+                dayCycle,
+                playerDamage,
+                dinoDamage,
+                structureDamage,
+                playerResist,
+                dinoResist,
+                structureResist,
+                structureDecayMultiplier,
+                dinoCount,
+                xpMultiplier,
+                pveStructureDecayMultiplier,
+                pveStructureDestructionPeriod,
+                saddleStructureLimit,
+                perPlatformStructureMultiplier,
+                tameMultiplier,
+                harvestMultiplier,
+                resourceHealth,
+                resourceRespawn,
+                playerWater,
+                playerFood,
+                playerStamina,
+                playerHealth,
+                dinoFood,
+                dinoStamina,
+                dinoHealth,
+                difficulty,
+                maxPlayers,
+                levelCap,
+                engramStep,
+                lvlStep
             };
+
+            foreach (TextBox item in numeric)
+            {
+                if(item.Text.Equals(""))
+                {
+                    switch(item.Name)
+                    {
+                        case "difficulty":
+                            item.Text.Equals("4.0");
+                            break;
+                        case "maxPlayers":
+                            item.Text.Equals("50");
+                            break;
+                        case "levelCap":
+                            item.Text.Equals("94");
+                            break;
+                        case "engramStep":
+                            item.Text.Equals("4");
+                            break;
+                        case "lvlStep":
+                            item.Text.Equals("10");
+                            break;
+                        default:
+                            item.Text.Equals("1.0");
+                            break;
+                    }
+                }
+                else if(!item.Text.All(Char.IsDigit))
+                {
+                    errors.Add("Feild must be numerical: " + item.Name);
+                }
+            }
+
+            return errors;
         }
 
         /// <summary>
@@ -488,7 +633,7 @@ namespace ArkConfigurationTool
                 banList.Text
             };
 
-            GameUserIni game = new GameUserIni();
+            GameUserIni game = new GameUserIni(motd.Text);
             settings = game.write(defaultFalse, defaultTrue, floatValues, stringValues, intValues);
 
             return settings;

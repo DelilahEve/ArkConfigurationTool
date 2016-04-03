@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,8 +33,20 @@ namespace ArkConfigurationTool
         public List<String> read()
         {
             List<String> settings = new List<String>();
+            
+            if(File.Exists(fileName))
+            {
+                StreamReader reader = new StreamReader(fileName);
 
-            // read settings into list
+                String line;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    settings.Add(line);
+                }
+
+                reader.Close();
+            }
 
             return settings;
         }
@@ -45,7 +58,19 @@ namespace ArkConfigurationTool
         /// <param name="settings"></param>
         public void write(List<String> settings)
         {
-            // write settings to file here
+            if (!File.Exists(fileName))
+            {
+                File.Create(fileName);
+            }
+
+            StreamWriter writer = new StreamWriter(fileName);
+
+            foreach(String setting in settings)
+            {
+                writer.WriteLine(setting);
+            }
+
+            writer.Close();
         }
     }
 }

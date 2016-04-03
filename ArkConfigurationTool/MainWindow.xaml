@@ -16,7 +16,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Menu IsMainMenu="True"
+        <!--Menu IsMainMenu="True"
               Height="20px"
               VerticalAlignment="Top">
 
@@ -40,11 +40,11 @@
 
             <MenuItem Header="_Help" />
 
-        </Menu>
+        </Menu -->
 
         <TabControl
             Grid.Row="0"
-            Margin="8px 30px 8px 0px" >
+            Margin="8px 8px 8px 0px" >
 
             <TabItem
                 Header="Basic" >
